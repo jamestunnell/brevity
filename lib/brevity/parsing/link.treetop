@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Link
+  rule link
+    [=\-~/]
+  end
+end
+
+end

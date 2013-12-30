@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Nonzero
+  rule nonzero_number
+    [0]* [1-9] [0-9]*
+  end
+end
+
+end

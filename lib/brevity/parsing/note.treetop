@@ -1,0 +1,18 @@
+module Brevity
+
+grammar Note
+  include Pitch
+  include Accent
+  include Link
+  include Nonzero
+  
+  rule note
+    (accent)? duration ("@" pitch link? ("," pitch link?)*)?
+  end
+  
+  rule duration
+    (nonzero_number ("/" nonzero_number?)?) / ("/" nonzero_number)
+  end
+end
+
+end

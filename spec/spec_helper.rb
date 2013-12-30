@@ -1,4 +1,4 @@
 require 'rspec'
-require 'brevity/version'
+require 'brevity'
 
 include Brevity

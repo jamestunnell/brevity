@@ -31,3 +31,33 @@ YARD::Rake::YardocTask.new
 task :doc => :yard
 
 require "bundler/gem_tasks"
+
+task :build_parsers do
+  wd = Dir.pwd
+  Dir.chdir "lib/brevity/parsing"
+  parser_files = Dir.glob(["*.treetop","*.tt"])
+  
+  if parser_files.empty?
+    puts "No parsers found"
+    return
+  end
+
+  build_list = parser_files.select do |fname|
+    basename = File.basename(fname, File.extname(fname))
+    rb_name = "#{basename}.rb"
+    !File.exists?(rb_name) || (File.mtime(fname) > File.mtime(rb_name))
+  end
+  
+  if build_list.any?
+    puts "building parsers:"
+    build_list.each do |fname|
+      basename = File.basename(fname, File.extname(fname))
+      puts "  #{fname} -> #{basename}.rb"
+      `tt -f #{fname}`
+    end
+  else
+    puts "Parsers are up-to-date"
+  end
+  Dir.chdir wd
+end
+task :spec => :build_parsers

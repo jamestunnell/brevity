@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Pitch
+  rule pitch
+    [A-Ga-g] [#b]? [0-9]
+  end
+end
+
+end

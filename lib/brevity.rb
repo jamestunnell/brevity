@@ -1,1 +1,10 @@
 require 'brevity/version'
+
+require 'treetop'
+require 'brevity/parsing/accent'
+require 'brevity/parsing/pitch'
+require 'brevity/parsing/link'
+require 'brevity/parsing/nonzero'
+require 'brevity/parsing/note'
+require 'brevity/parsing/dynamic'
+require 'brevity/parsing/part'

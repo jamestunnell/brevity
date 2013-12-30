@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Accent
+  rule accent
+    [.'>^_]
+  end
+end
+
+end
