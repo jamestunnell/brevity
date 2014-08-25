@@ -73,7 +73,7 @@ describe NoteParser do
         end
       end
     end
-    puts @valid[:pitches]
+    #puts @valid[:pitches]
   end
   
   context "note duration only" do

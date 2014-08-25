@@ -1,0 +1,11 @@
+module Brevity
+
+grammar Duration
+  include Nonzero
+  
+  rule duration
+    (nonzero_number ("/" nonzero_number?)?) / ("/" nonzero_number)
+  end
+end
+
+end
