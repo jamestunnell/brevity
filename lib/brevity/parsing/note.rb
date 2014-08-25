@@ -34,7 +34,7 @@ module Note
 
   module Note2
     def duration
-      elements[1]
+      elements[0]
     end
 
   end
@@ -51,93 +51,93 @@ module Note
     end
 
     i0, s0 = index, []
-    r2 = _nt_accent
-    if r2
-      r1 = r2
-    else
-      r1 = instantiate_node(SyntaxNode,input, index...index)
-    end
+    r1 = _nt_duration
     s0 << r1
     if r1
-      r3 = _nt_duration
-      s0 << r3
-      if r3
-        i5, s5 = index, []
-        if (match_len = has_terminal?("@", false, index))
-          r6 = true
-          @index += match_len
-        else
-          terminal_parse_failure("@")
-          r6 = nil
-        end
-        s5 << r6
-        if r6
-          r7 = _nt_pitch
-          s5 << r7
+      i3, s3 = index, []
+      if (match_len = has_terminal?("@", false, index))
+        r4 = true
+        @index += match_len
+      else
+        terminal_parse_failure("@")
+        r4 = nil
+      end
+      s3 << r4
+      if r4
+        r5 = _nt_pitch
+        s3 << r5
+        if r5
+          r7 = _nt_link
           if r7
-            r9 = _nt_link
-            if r9
-              r8 = r9
-            else
-              r8 = instantiate_node(SyntaxNode,input, index...index)
-            end
-            s5 << r8
-            if r8
-              s10, i10 = [], index
-              loop do
-                i11, s11 = index, []
-                if (match_len = has_terminal?(",", false, index))
-                  r12 = true
-                  @index += match_len
-                else
-                  terminal_parse_failure(",")
-                  r12 = nil
-                end
-                s11 << r12
-                if r12
-                  r13 = _nt_pitch
-                  s11 << r13
-                  if r13
-                    r15 = _nt_link
-                    if r15
-                      r14 = r15
-                    else
-                      r14 = instantiate_node(SyntaxNode,input, index...index)
-                    end
-                    s11 << r14
-                  end
-                end
-                if s11.last
-                  r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
-                  r11.extend(Note0)
-                else
-                  @index = i11
-                  r11 = nil
-                end
+            r6 = r7
+          else
+            r6 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s3 << r6
+          if r6
+            s8, i8 = [], index
+            loop do
+              i9, s9 = index, []
+              if (match_len = has_terminal?(",", false, index))
+                r10 = true
+                @index += match_len
+              else
+                terminal_parse_failure(",")
+                r10 = nil
+              end
+              s9 << r10
+              if r10
+                r11 = _nt_pitch
+                s9 << r11
                 if r11
-                  s10 << r11
-                else
-                  break
+                  r13 = _nt_link
+                  if r13
+                    r12 = r13
+                  else
+                    r12 = instantiate_node(SyntaxNode,input, index...index)
+                  end
+                  s9 << r12
                 end
               end
-              r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
-              s5 << r10
+              if s9.last
+                r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+                r9.extend(Note0)
+              else
+                @index = i9
+                r9 = nil
+              end
+              if r9
+                s8 << r9
+              else
+                break
+              end
             end
+            r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+            s3 << r8
           end
         end
-        if s5.last
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-          r5.extend(Note1)
+      end
+      if s3.last
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        r3.extend(Note1)
+      else
+        @index = i3
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r2
+      if r2
+        r15 = _nt_accent
+        if r15
+          r14 = r15
         else
-          @index = i5
-          r5 = nil
+          r14 = instantiate_node(SyntaxNode,input, index...index)
         end
-        if r5
-          r4 = r5
-        else
-          r4 = instantiate_node(SyntaxNode,input, index...index)
-        end
-        s0 << r4
+        s0 << r14
       end
     end
     if s0.last

@@ -7,7 +7,7 @@ grammar Note
   include Duration
   
   rule note
-    (accent)? duration ("@" pitch link? ("," pitch link?)*)?
+    duration ("@" pitch link? ("," pitch link?)*)? (accent)? 
   end  
 end
 

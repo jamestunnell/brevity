@@ -5,8 +5,8 @@ describe NoteParser do
     @parser = NoteParser.new
     @valid = {
       :numbers => [1,5,50,3999,01,0010,0000005050],
-      :links => ["=","-","~","/"],
-      :accents => [".","'",">","^","_"],
+      :links => ["=","-","~","/",""],
+      :accents => [".","'",">","^","_",""],
       :pitch_classes => ["A","B","C","D","E","F","G"],
       :accidentals => ["\#","b",""],
       :octaves => [0,1,2,3,4,5,6,7,8,9],
@@ -14,7 +14,7 @@ describe NoteParser do
     
     @invalid = {
       :numbers => [0,00],
-      :links => ["_",";"],
+      :links => ["{",";"],
       :accents => ["*","&"],
       :pitch_classes => ["H","Z"],
       :accidentals => ["$"],
@@ -155,7 +155,7 @@ describe NoteParser do
       it 'should parse' do
         @valid[:accents].each do |accent|
           ["1","1/4","/4","1/"].each do |duration|
-            str = "#{accent}#{duration}"
+            str = "#{duration}#{accent}"
             @parser.parse(str).should_not be nil
           end
         end
