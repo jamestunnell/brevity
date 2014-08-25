@@ -1,0 +1,246 @@
+\documentclass{scrartcl}
+\usepackage{url}
+\usepackage{subfig}
+
+\begin{document}
+
+\author{James Tunnell}
+\title{Brevity\\
+\begin{LARGE}
+A Compact Music Notation Format
+\end{LARGE}}
+\maketitle
+
+\begin{abstract}
+In a computer, music notation is usually represented by some file format. Music notation formats are often awkward or impossible to work with directly, and require a visualization layer that does not resemble the underlying representation. A simple file format for representation is presented that is straight-forward to both read and modify directly.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+Music notation formats generally have no natural visual resemblance to the physical musical notations they represent. This is unfortunate since for composers the visual arrangement of a composition conveys information about musical structure, since it shows parts together in parallel throughout time. So to allow computer-assisted composers to get the desired visual benefit, an extra visualization layer is provided, so that a digital score is presented in the end. But to gain the full benefit, a composer also needs to be able manipulate the digital score as if it is the very representation of the music. So in the end the extra layer must translate both directions between the extra presentation layer and the underlying representation layer.
+
+The Brevity format presented here strives to be as functional as a traditional file format (like MIDI or MusicXML) yet visually similar to a physical score. There is added complexity though, because in order to directly view and manipulate a file in this format one must be familiar with the particular syntax and symbols used to represent musical constructs. The following sections explain these particulars in detail.
+
+\section{Note and Rests}
+The basic units of a score are the notes and rests, because they define how time is broken up and what should happen during each time chunk. For a rest, of course, nothing should happen. 
+
+In Brevity, notes and rests both define a duration, and a note additionally define a number of pitches to be played for the duration. So a rest is really just a note where no pitches are given to play. Of course, multiple pitches mean a note is really a chord.
+attached
+\subsection{Syntax Overview}
+The syntax for a single note or rest is shown below, where the number of pitches can be zero or more.
+\begin{center}
+\framebox{D} \framebox{\framebox{P} \framebox{L} , \framebox{P} \framebox{L} , \ldots} \framebox{A} 
+\end{center}
+\begin{tabbing}
+  \hspace{1.85in}\= D: duration \\
+  \> P: pitch \\
+  \> L: link \\
+  \> A: accent \\
+\end{tabbing}
+To make a sequence of notes/rests, simply string notes together, separated by spaces.
+
+\subsection{Durations}
+Notes and rests both need to declare some duration. Duration is represented by a rational number (i.e. a fraction), as in '3/4' or '2/3'. The numerator can be omitted, as in '/4', and then a 1 is assumed. This is convenient for quarter notes, eight notes, etc. Or, the denominator (and forward-slash) can be omitted, as in '1/' or '1' for a whole note.
+
+\subsection{Pitches}
+Every note can have zero or more pitches attached to it (of course, zero pitches would make the note a rest). Each pitch is given by two components: pitch class and octave. Pitch class is represented by a letter from \verb|A| to \verb|G| and an optional \verb|#| (sharp) or \verb|b| (flat). Following the pitch class, the octave is given, represented by a single decimal digit (\verb|0| to \verb|9|). For example: '\verb|C4|', '\verb|Eb2|', and '\verb|F#5|'.
+
+\subsection{Accents}
+Accents control the duration of a note and the shape of note loudness (like the envelope of a signal). Accents are represented by a single character placed at the end of the note body, after all the pitches and links. Simply omit the accent character to place a note without any accent.
+
+The supported accent types and the characters used to represent them are summarized in Table~\ref{tab:accent_characters}. A short description of the effect of each accent type follows:
+\begin{itemize}
+	\item Staccato: separated from next note
+	\item Staccatissimo: very separated from next note
+	\item Accent (marcato): emphasize beginning and then taper off rather quickly
+	\item Martellato (hammered): loud as an accent mark and short as a staccato
+	\item Tenuto: Played at full length or longer. When under a slur, note is separated with a little space from surrounding notes
+\end{itemize}
+
+\begin{table}[ht]
+\begin{center}
+  \begin{tabular}{ l | l }
+    \hline
+    \textbf{Accent type} & \textbf{Marker} \\ \hline
+    Staccato & \verb|.| \hspace{.1cm} period \\ \hline
+    Staccatissimo & \verb|'| \hspace{.1cm} apostrophe \\ \hline
+    Accent (marcato) & \verb|>| \hspace{.1cm} greater than \\ \hline
+    Martellato (hammered) & \verb|^| \hspace{.1cm} caret \\ \hline
+    Tenuto (sustained) & \verb|_| \hspace{.1cm} underscore \\ \hline
+    \hline
+  \end{tabular}
+\end{center}
+\caption{Accent types and markers}
+\label{tab:accent_characters}
+\end{table}
+
+As an example, some stocatto notes:
+\begin{center}
+\verb|/4C5. /4D5. /4E5.|
+\end{center}
+
+\subsection{Relationships}
+Note relationships (or links) control the transition between sequential notes. A link is just between two notes, and won't have any other effect outside those notes. A link marker is placed just after a note pitch. Here is an example of a passage connected by slurs:
+\begin{center}
+\verb|/4C4= /16C4= /16E4= /4F4|
+\end{center}
+In addition, if the following note contains multiple pitches, the link's target pitch must be specified as well. Here is an example of this, using slur/tie links:
+\begin{center}
+\verb|/4C4=C4 /16C4=E4,F4=G4 /16E4,G4|
+\end{center}
+Table~\ref{tab:link_markers} lists the supported link types and the characters used to represent them. Here is a description of each supported link type:
+\begin{itemize}
+\item Slur/tie: connects two pitches with no separation and no rearticulation. The same link marker is used for a slur or tie since they're effectively the same relationship.
+\item Legato: connects two pitches with no separation and with rearticulation.
+\item Glissando: connect two pitches by articulating all the pitches in between.
+\item Portamento: continuously glide between pitches, without rearticulation.
+\end{itemize}
+\begin{table}[ht]
+\begin{center}
+  \begin{tabular}{ l | l}
+    \hline
+    \textbf{Link type} & \textbf{Marker} \\ \hline
+    Slur/Tie & \verb|=| \hspace{.1cm} equals \\ \hline
+    Legato & \verb|-| \hspace{.1cm} minus \\ \hline
+    Glissando & \verb|~| \hspace{.1cm} tilde \\ \hline
+    Portamento & \verb|/| \hspace{.1cm} forward-slash \\ \hline
+    \hline
+  \end{tabular}
+\end{center}
+\caption{Link types and markers}
+\label{tab:link_markers}
+\end{table}
+
+\section{Sequences}
+A sequence is a series of notes/rests. A sequence is declared by placing notes/rests together and separating by spaces, as in 
+\begin{center}
+\verb|/4D6 /4A5 /16Ab6 3/16Bb6= /4Bb6|
+\end{center}
+
+A sequence can either be labeled for later reused, or modified to produce a new sequence.
+
+\subsection{Labeling Sequences}
+Sequences are assigned to a label by following the label with \verb|:=| and then a sequence, as in
+\begin{center}
+\verb|my_label:= /8C5 /8D5 /8E5 /8D5 /2C5|
+\end{center}
+
+Once labeled, the label can be used in place of the sequence. 
+
+\subsubsection{Continuing Labeled Sequences}
+A labeled sequence can be continued later, which will add more notes onto the end of the sequence. This might also be called concatenation.
+
+A labeled sequence is continued by following the label with \verb|:+| and then a sequence, as in
+\begin{tabbing}
+  \hspace{1in}\= \verb| bass:= /8C4 /8C4 /8C4 /8C4| \\
+  \> \verb| bass:+ /8E4 /8E4 /8E4 /8E4|
+\end{tabbing}
+
+This allows a sequence to span over multiple lines by starting each line with the same label. But continuing lines do not have to be consecutive, as long as the same label is used for each continuing line. So, multiple parts can be interleaved as follows:
+\begin{tabbing}
+  \hspace{1in}\= \verb| bass:= /4C4 /4C4 /4C4 /4C4| \\
+  \> \verb| lead:=  /2E6 /2E6| \\
+  \> ~\\
+  \> \verb| bass:+ /4E4 /4E4 /4E4 /4E4| \\
+  \> \verb| lead:+  /2G6 /2G6| \\
+\end{tabbing}
+
+\subsection{Modifying Sequences}
+Sequences can be modified, which results in a new sequence. If a sequence is not labeled, it needs to be grouped using parentheses before it can be modified, as in 
+\begin{center}
+\verb|( /4C5 /4D5 )|
+\end{center}
+
+Sequences can be duplicated, transposed, stretched, and composed. Additionally, sequence modifications can be chained one right after the other.
+
+\subsubsection{Duplicating Sequences}
+A sequence can be replaced some number of duplicate sequences by following it with \verb|:n|, where $n$ indicates the number of duplicates.
+
+For example, to replace a sequence with $2$ duplicate sequences (i.e., repeat once),
+\begin{center}
+\verb|( /8C5 /8C#5 ):2| \ is equivalent to \verb|/8C5 /8C#5 /8C5 /8C#5|
+\end{center}
+
+\subsubsection{Transposing Sequences}
+A sequence can be transposed by appending a +/- and some number of semitones (half-steps) to transpose by. For example, to transpose up four semitones:
+\begin{center}
+\verb| ( /4C5 /4D5 )+4| \ would yield \verb|/4E5 /4F#5|
+\end{center}
+
+Or, to transpose down by four semitones: 
+\begin{center}
+\verb| ( /4C5 /4D5 )-4| \ would yield \verb|/4Ab4 /4Bb4|
+\end{center}
+The result is the sequence transposed up/down some number of semitones.
+
+\subsubsection{Stretching Sequences}
+Sequences can be stretched in two ways: stretching to equal some given total duration, or stretching by multiplying all note durations by some factor.
+
+\paragraph{Stretching to equal some duration}~\\
+To stretch so that total note duration equals some given note duration. This is done by following a sequence with \verb|:r|, where $r$ is some note duration.
+
+For example, to turn a sequence of two quarter notes into two half notes,
+\begin{center}
+\verb| ( /4C5 /4D5 )=1| \ is equivalent to \verb|/2C5 /2D5|
+\end{center}
+
+Or to make a half note triplet from three quarter notes,
+\begin{center}
+\verb| ( /4A4 /4B4 /4C4 )=/2| \ is equivalent to \verb|/6A4 /6B4 /6C4|
+\end{center}
+
+If the sequence contains notes of different durations, each note keeps the same ratio to total duration. For example,
+\begin{center}
+\verb| ( /2Eb5 /4Bb5 3/4Bb5 )=1| \ is equivalent to \verb| /3Eb5 /6Bb5 /2Bb5|
+\end{center}
+
+\paragraph{Stretching by multiplying note durations}~\\
+A sequence can be stretched by multiplying the note durations by some multiplicative factor. This is done by following a sequence with \verb|*r|, where $r$ is some rational number, that can be formatted just like a note duration.
+
+For example, to multiply durations by 2,
+\begin{center}
+\verb| ( /4C5 /4D5 /2E5 )*2| \ is equivalet to \verb|/2C5 /2D5 1E5|
+\end{center}
+
+\subsubsection{Composing Sequences}
+Sequences can be composed together to create a new sequence. This is done implicitly just by following one sequence with more notes or sequences. 
+
+For example, 
+\begin{center}
+\verb|(/4A5 /4C5):2 1Eb5| \ would be equivalent to \verb|/4A5 /4C5 /4A5 /4C5 1Eb5|
+\end{center}
+
+Of course, labels can be used in places of sequences, as in
+\begin{tabbing}
+  \hspace{1in}\= \verb|seq1:= /4F4 /4G4| \\
+  \> \verb|seq2:= seq1:2 seq1+2|
+\end{tabbing}
+
+\subsubsection{Chaining Modifications}
+Sequence modifications can be chained, so each modification is applied on the new sequence resulting from the previous modification. For example,
+\begin{center}
+\verb|(/4F4 /4G4)+2:2| \ is equivalent to \verb|/4G4 /4A4 /4G4 /4A4|
+\end{center}
+
+\section{Dynamics}
+Dynamics is concerned with absolute base loudness over an entire part. This is in contrast to note accents which affect the relative loudness shape of a single note. Dynamic levels are represented by markers which you might expect: \verb|ppp|, \verb|pp|, \verb|p|, \verb|mp|, \verb|mf|, \verb|f|, \verb|ff|, and \verb|fff|.
+
+\subsection{Immediate Changes}
+To immediately change dynamic level, simply place a dynamic marker by itself before a note. The change will take effect immediately at the start of the note. Here is an example of an immediate dynamic change: \begin{center}
+\verb| p /8C6 /8C6 /4F6 f /8D6 /8D6 /4G6 |
+\end{center}
+
+\subsection{Gradual Changes}
+Dynamic level can be gradually changed over time with a crescendo or decrescendo, the start of which is marked by a \verb|<| or \verb|>|, respectively. The end of a crescendo or decrescendo is marked by the target dynamic level. For example, \verb|> ... p| marks a decrescendo from the current dynamic level down to piano over the course of whatver note/rests come between. Here is an example of a gradual dynamic change:
+\begin{center}
+\verb| p< /8C6 /8C6 /4F6 f /8D6 /8D6 /4G6 |
+\end{center}
+
+\section{Parts}
+Of course, a musical score wouldn't be complete without parts. If you've understood note sequences, then the good news is that a part is a note sequence! However, in the end, the final score needs have a name associated with each part. This is accomplished with a syntax like an associative array (hash table), as follows:
+\begin{center}
+\verb|{"Bass": bass, "Lead Guitar":lead, "Rhythm Guitar":rhythm}|
+\end{center}
+
+\end{document}
