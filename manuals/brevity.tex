@@ -5,7 +5,7 @@
 \begin{document}
 
 \author{James Tunnell}
-\title{Brevity\\
+\title{brevity\\
 \begin{LARGE}
 A Compact Music Notation Format
 \end{LARGE}}
@@ -20,12 +20,12 @@ In a computer, music notation is usually represented by some file format. Music 
 \section{Introduction}
 Music notation formats generally have no natural visual resemblance to the physical musical notations they represent. This is unfortunate since for composers the visual arrangement of a composition conveys information about musical structure, since it shows parts together in parallel throughout time. So to allow computer-assisted composers to get the desired visual benefit, an extra visualization layer is provided, so that a digital score is presented in the end. But to gain the full benefit, a composer also needs to be able manipulate the digital score as if it is the very representation of the music. So in the end the extra layer must translate both directions between the extra presentation layer and the underlying representation layer.
 
-The Brevity format presented here strives to be as functional as a traditional file format (like MIDI or MusicXML) yet visually similar to a physical score. There is added complexity though, because in order to directly view and manipulate a file in this format one must be familiar with the particular syntax and symbols used to represent musical constructs. The following sections explain these particulars in detail.
+The brevity format presented here strives to be as functional as a traditional file format (like MIDI or MusicXML) yet visually similar to a physical score. There is added complexity though, because in order to directly view and manipulate a file in this format one must be familiar with the particular syntax and symbols used to represent musical constructs. The following sections explain these particulars in detail.
 
 \section{Note and Rests}
 The basic units of a score are the notes and rests, because they define how time is broken up and what should happen during each time chunk. For a rest, of course, nothing should happen. 
 
-In Brevity, notes and rests both define a duration, and a note additionally define a number of pitches to be played for the duration. So a rest is really just a note where no pitches are given to play. Of course, multiple pitches mean a note is really a chord.
+In brevity, notes and rests both define a duration, and a note additionally define a number of pitches to be played for the duration. So a rest is really just a note where no pitches are given to play. Of course, multiple pitches mean a note is really a chord.
 attached
 \subsection{Syntax Overview}
 The syntax for a single note or rest is shown below, where the number of pitches can be zero or more.

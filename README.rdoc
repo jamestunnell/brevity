@@ -1,12 +1,12 @@
-= Brevity
+= brevity
 
-* {Homepage}[https://rubygems.org/gems/Brevity]
-* {Documentation}[http://rubydoc.info/gems/Brevity/frames]
+* {Homepage}[https://rubygems.org/gems/brevity]
+* {Documentation}[http://rubydoc.info/gems/brevity/frames]
 * {Email}[mailto:jamestunnell at gmail.com]
 
 == Description
 
-Parse and process Brevity files, used for music notation. Convert them to other formats.
+Parse and process brevity files, used for music notation. Convert them to other formats.
 
 == Features
 
@@ -18,7 +18,7 @@ Parse and process Brevity files, used for music notation. Convert them to other 
 
 == Install
 
-  $ gem install Brevity
+  $ gem install brevity
 
 == Copyright
 
