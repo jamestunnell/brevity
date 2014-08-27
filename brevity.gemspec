@@ -24,5 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'pry'
   
   gem.add_dependency 'treetop'
-  gem.add_dependency 'music-transcription'
+  gem.add_dependency 'music-transcription', '>= 0.4.2'
 end
