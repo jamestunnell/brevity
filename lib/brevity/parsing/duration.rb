@@ -12,22 +12,6 @@ module Duration
 
   include Nonzero
 
-  module Duration0
-  end
-
-  module Duration1
-    def nonzero_number
-      elements[0]
-    end
-
-  end
-
-  module Duration2
-    def nonzero_number
-      elements[1]
-    end
-  end
-
   def _nt_duration
     start_index = index
     if node_cache[:duration].has_key?(index)
@@ -40,83 +24,171 @@ module Duration
     end
 
     i0 = index
-    i1, s1 = index, []
-    r2 = _nt_nonzero_number
-    s1 << r2
-    if r2
-      i4, s4 = index, []
-      if (match_len = has_terminal?("/", false, index))
-        r5 = true
-        @index += match_len
-      else
-        terminal_parse_failure("/")
-        r5 = nil
-      end
-      s4 << r5
-      if r5
-        r7 = _nt_nonzero_number
-        if r7
-          r6 = r7
-        else
-          r6 = instantiate_node(SyntaxNode,input, index...index)
-        end
-        s4 << r6
-      end
-      if s4.last
-        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-        r4.extend(Duration0)
-      else
-        @index = i4
-        r4 = nil
-      end
-      if r4
-        r3 = r4
-      else
-        r3 = instantiate_node(SyntaxNode,input, index...index)
-      end
-      s1 << r3
-    end
-    if s1.last
-      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
-      r1.extend(Duration1)
-    else
-      @index = i1
-      r1 = nil
-    end
+    r1 = _nt_num_and_den
     if r1
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      i8, s8 = index, []
-      if (match_len = has_terminal?("/", false, index))
-        r9 = true
-        @index += match_len
+      r2 = _nt_num_only
+      if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
+        r0 = r2
       else
-        terminal_parse_failure("/")
-        r9 = nil
-      end
-      s8 << r9
-      if r9
-        r10 = _nt_nonzero_number
-        s8 << r10
-      end
-      if s8.last
-        r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-        r8.extend(Duration2)
-      else
-        @index = i8
-        r8 = nil
-      end
-      if r8
-        r8 = SyntaxNode.new(input, (index-1)...index) if r8 == true
-        r0 = r8
-      else
-        @index = i0
-        r0 = nil
+        r3 = _nt_den_only
+        if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
+          r0 = r3
+        else
+          @index = i0
+          r0 = nil
+        end
       end
     end
 
     node_cache[:duration][start_index] = r0
+
+    r0
+  end
+
+  module NumAndDen0
+    def nonzero_number1
+      elements[0]
+    end
+
+    def nonzero_number2
+      elements[2]
+    end
+  end
+
+  def _nt_num_and_den
+    start_index = index
+    if node_cache[:num_and_den].has_key?(index)
+      cached = node_cache[:num_and_den][index]
+      if cached
+        node_cache[:num_and_den][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_nonzero_number
+    s0 << r1
+    if r1
+      if (match_len = has_terminal?("/", false, index))
+        r2 = true
+        @index += match_len
+      else
+        terminal_parse_failure("/")
+        r2 = nil
+      end
+      s0 << r2
+      if r2
+        r3 = _nt_nonzero_number
+        s0 << r3
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(NumDenNode,input, i0...index, s0)
+      r0.extend(NumAndDen0)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:num_and_den][start_index] = r0
+
+    r0
+  end
+
+  module NumOnly0
+    def numerator
+      elements[0]
+    end
+
+  end
+
+  def _nt_num_only
+    start_index = index
+    if node_cache[:num_only].has_key?(index)
+      cached = node_cache[:num_only][index]
+      if cached
+        node_cache[:num_only][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_nonzero_number
+    s0 << r1
+    if r1
+      if (match_len = has_terminal?("/", false, index))
+        r3 = true
+        @index += match_len
+      else
+        terminal_parse_failure("/")
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(NumOnlyNode,input, i0...index, s0)
+      r0.extend(NumOnly0)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:num_only][start_index] = r0
+
+    r0
+  end
+
+  module DenOnly0
+    def denominator
+      elements[1]
+    end
+  end
+
+  def _nt_den_only
+    start_index = index
+    if node_cache[:den_only].has_key?(index)
+      cached = node_cache[:den_only][index]
+      if cached
+        node_cache[:den_only][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    if (match_len = has_terminal?("/", false, index))
+      r1 = true
+      @index += match_len
+    else
+      terminal_parse_failure("/")
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      r2 = _nt_nonzero_number
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(DenOnlyNode,input, i0...index, s0)
+      r0.extend(DenOnly0)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:den_only][start_index] = r0
 
     r0
   end

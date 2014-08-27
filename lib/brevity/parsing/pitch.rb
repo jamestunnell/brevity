@@ -18,25 +18,27 @@ module Pitch
     if node_cache[:pitch].has_key?(index)
       cached = node_cache[:pitch][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:pitch][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('\G[A-Ga-g]', true, index)
+    if has_terminal?(@regexps[gr = '\A[A-Ga-g]'] ||= Regexp.new(gr), :regexp, index)
       r1 = true
       @index += 1
     else
+      terminal_parse_failure('[A-Ga-g]')
       r1 = nil
     end
     s0 << r1
     if r1
-      if has_terminal?('\G[#b]', true, index)
+      if has_terminal?(@regexps[gr = '\A[#b]'] ||= Regexp.new(gr), :regexp, index)
         r3 = true
         @index += 1
       else
+        terminal_parse_failure('[#b]')
         r3 = nil
       end
       if r3
@@ -46,17 +48,18 @@ module Pitch
       end
       s0 << r2
       if r2
-        if has_terminal?('\G[0-9]', true, index)
+        if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
           r4 = true
           @index += 1
         else
+          terminal_parse_failure('[0-9]')
           r4 = nil
         end
         s0 << r4
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(PitchNode,input, i0...index, s0)
       r0.extend(Pitch0)
     else
       @index = i0

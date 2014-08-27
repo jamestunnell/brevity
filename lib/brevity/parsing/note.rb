@@ -18,27 +18,6 @@ module Note
 
   include Duration
 
-  module Note0
-    def pitch
-      elements[1]
-    end
-
-  end
-
-  module Note1
-    def pitch
-      elements[1]
-    end
-
-  end
-
-  module Note2
-    def duration
-      elements[0]
-    end
-
-  end
-
   def _nt_note
     start_index = index
     if node_cache[:note].has_key?(index)
@@ -50,105 +29,267 @@ module Note
       return cached
     end
 
+    i0 = index
+    r1 = _nt_chord
+    if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
+      r0 = r1
+    else
+      r2 = _nt_single_pitch
+      if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
+        r0 = r2
+      else
+        r3 = _nt_rest
+        if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
+          r0 = r3
+        else
+          @index = i0
+          r0 = nil
+        end
+      end
+    end
+
+    node_cache[:note][start_index] = r0
+
+    r0
+  end
+
+  module Rest0
+    def duration
+      elements[0]
+    end
+
+  end
+
+  def _nt_rest
+    start_index = index
+    if node_cache[:rest].has_key?(index)
+      cached = node_cache[:rest][index]
+      if cached
+        node_cache[:rest][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
     i0, s0 = index, []
     r1 = _nt_duration
     s0 << r1
     if r1
-      i3, s3 = index, []
-      if (match_len = has_terminal?("@", false, index))
-        r4 = true
-        @index += match_len
-      else
-        terminal_parse_failure("@")
-        r4 = nil
-      end
-      s3 << r4
-      if r4
-        r5 = _nt_pitch
-        s3 << r5
-        if r5
-          r7 = _nt_link
-          if r7
-            r6 = r7
-          else
-            r6 = instantiate_node(SyntaxNode,input, index...index)
-          end
-          s3 << r6
-          if r6
-            s8, i8 = [], index
-            loop do
-              i9, s9 = index, []
-              if (match_len = has_terminal?(",", false, index))
-                r10 = true
-                @index += match_len
-              else
-                terminal_parse_failure(",")
-                r10 = nil
-              end
-              s9 << r10
-              if r10
-                r11 = _nt_pitch
-                s9 << r11
-                if r11
-                  r13 = _nt_link
-                  if r13
-                    r12 = r13
-                  else
-                    r12 = instantiate_node(SyntaxNode,input, index...index)
-                  end
-                  s9 << r12
-                end
-              end
-              if s9.last
-                r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
-                r9.extend(Note0)
-              else
-                @index = i9
-                r9 = nil
-              end
-              if r9
-                s8 << r9
-              else
-                break
-              end
-            end
-            r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-            s3 << r8
-          end
-        end
-      end
-      if s3.last
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        r3.extend(Note1)
-      else
-        @index = i3
-        r3 = nil
-      end
+      r3 = _nt_accent
       if r3
         r2 = r3
       else
         r2 = instantiate_node(SyntaxNode,input, index...index)
       end
       s0 << r2
-      if r2
-        r15 = _nt_accent
-        if r15
-          r14 = r15
-        else
-          r14 = instantiate_node(SyntaxNode,input, index...index)
-        end
-        s0 << r14
-      end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-      r0.extend(Note2)
+      r0 = instantiate_node(RestNode,input, i0...index, s0)
+      r0.extend(Rest0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:note][start_index] = r0
+    node_cache[:rest][start_index] = r0
+
+    r0
+  end
+
+  module SinglePitch0
+    def duration
+      elements[0]
+    end
+
+    def pl
+      elements[1]
+    end
+
+  end
+
+  def _nt_single_pitch
+    start_index = index
+    if node_cache[:single_pitch].has_key?(index)
+      cached = node_cache[:single_pitch][index]
+      if cached
+        node_cache[:single_pitch][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_duration
+    s0 << r1
+    if r1
+      r2 = _nt_pitch_link
+      s0 << r2
+      if r2
+        r4 = _nt_accent
+        if r4
+          r3 = r4
+        else
+          r3 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s0 << r3
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(SinglePitchNode,input, i0...index, s0)
+      r0.extend(SinglePitch0)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:single_pitch][start_index] = r0
+
+    r0
+  end
+
+  module Chord0
+    def pl
+      elements[1]
+    end
+  end
+
+  module Chord1
+    def duration
+      elements[0]
+    end
+
+    def pl
+      elements[1]
+    end
+
+    def more_pitches
+      elements[2]
+    end
+
+  end
+
+  def _nt_chord
+    start_index = index
+    if node_cache[:chord].has_key?(index)
+      cached = node_cache[:chord][index]
+      if cached
+        node_cache[:chord][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_duration
+    s0 << r1
+    if r1
+      r2 = _nt_pitch_link
+      s0 << r2
+      if r2
+        s3, i3 = [], index
+        loop do
+          i4, s4 = index, []
+          if (match_len = has_terminal?(",", false, index))
+            r5 = true
+            @index += match_len
+          else
+            terminal_parse_failure(",")
+            r5 = nil
+          end
+          s4 << r5
+          if r5
+            r6 = _nt_pitch_link
+            s4 << r6
+          end
+          if s4.last
+            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+            r4.extend(Chord0)
+          else
+            @index = i4
+            r4 = nil
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
+        end
+        if s3.empty?
+          @index = i3
+          r3 = nil
+        else
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        end
+        s0 << r3
+        if r3
+          r8 = _nt_accent
+          if r8
+            r7 = r8
+          else
+            r7 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r7
+        end
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(ChordNode,input, i0...index, s0)
+      r0.extend(Chord1)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:chord][start_index] = r0
+
+    r0
+  end
+
+  module PitchLink0
+    def pitch
+      elements[0]
+    end
+
+    def the_link
+      elements[1]
+    end
+  end
+
+  def _nt_pitch_link
+    start_index = index
+    if node_cache[:pitch_link].has_key?(index)
+      cached = node_cache[:pitch_link][index]
+      if cached
+        node_cache[:pitch_link][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_pitch
+    s0 << r1
+    if r1
+      r3 = _nt_link
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(PitchLink0)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:pitch_link][start_index] = r0
 
     r0
   end

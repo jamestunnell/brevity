@@ -33,21 +33,21 @@ describe PartParser do
     end
 
     it 'should parse "guitar:\t1/4"' do
-      @parser.parse("guitar: 1/4").should_not be nil
+      @parser.parse("guitar:\t1/4").should_not be nil
     end
     
-    it 'should parse "guitar: /4@C2,E2"' do
+    it 'should parse "guitar: 1/4C2,E2"' do
       @parser.parse("guitar: 1/4").should_not be nil
     end
   end
   
   context 'one note plus dynamic change' do
-    it 'should parse "sax: mp 1@C4"' do
-      @parser.parse("sax: mp 1@C4").should_not be nil
+    it 'should parse "sax: mp 1C4"' do
+      @parser.parse("sax: mp 1C4").should_not be nil
     end
     
-    it 'should parse "sax: mp< 1@C4 ff"' do
-      @parser.parse("sax: mp< 1@C4 ff").should_not be nil
+    it 'should parse "sax: mp< 1C4 ff"' do
+      @parser.parse("sax: mp< 1C4 ff").should_not be nil
     end
   end
 end

@@ -10,21 +10,47 @@ module Link
     @root ||= :link
   end
 
+  include Pitch
+
+  module Link0
+    def link_sym
+      elements[0]
+    end
+
+    def target
+      elements[1]
+    end
+  end
+
   def _nt_link
     start_index = index
     if node_cache[:link].has_key?(index)
       cached = node_cache[:link][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:link][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('\G[=\\-~/]', true, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    i0, s0 = index, []
+    if has_terminal?(@regexps[gr = '\A[=\\-~/]'] ||= Regexp.new(gr), :regexp, index)
+      r1 = true
       @index += 1
     else
+      terminal_parse_failure('[=\\-~/]')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      r2 = _nt_pitch
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(LinkNode,input, i0...index, s0)
+      r0.extend(Link0)
+    else
+      @index = i0
       r0 = nil
     end
 

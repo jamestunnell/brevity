@@ -4,7 +4,19 @@ grammar Duration
   include Nonzero
   
   rule duration
-    (nonzero_number ("/" nonzero_number?)?) / ("/" nonzero_number)
+    num_and_den / num_only / den_only
+  end
+  
+  rule num_and_den
+    nonzero_number "/" nonzero_number <NumDenNode>
+  end
+  
+  rule num_only
+    numerator:nonzero_number "/"? <NumOnlyNode>
+  end
+  
+  rule den_only
+    "/" denominator:nonzero_number <DenOnlyNode>
   end
 end
 

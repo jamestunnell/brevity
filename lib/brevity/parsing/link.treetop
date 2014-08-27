@@ -1,9 +1,11 @@
 module Brevity
 
 grammar Link
+  include Pitch
+  
   rule link
-    [=\-~/]
-  end
+    link_sym:[=\-~/] target:pitch <LinkNode>
+  end  
 end
 
 end

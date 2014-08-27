@@ -21,6 +21,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 0.8'
   gem.add_development_dependency 'rspec', '~> 2.4'
   gem.add_development_dependency 'yard', '~> 0.8'
-
+  gem.add_development_dependency 'pry'
+  
   gem.add_dependency 'treetop'
+  gem.add_dependency 'music-transcription'
 end

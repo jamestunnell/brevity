@@ -5,7 +5,7 @@ describe NoteParser do
     @parser = NoteParser.new
     @valid = {
       :numbers => [1,5,50,3999,01,0010,0000005050],
-      :links => ["=","-","~","/",""],
+      :links => ["=","-","~","/"],
       :accents => [".","'",">","^","_",""],
       :pitch_classes => ["A","B","C","D","E","F","G"],
       :accidentals => ["\#","b",""],
@@ -77,80 +77,12 @@ describe NoteParser do
   end
   
   context "note duration only" do
-    context 'valid (non-zero) numerator and denominator' do
-      ["n","n/","n/d","/d"].each do |expr|
-        it "should parse durations of the form #{expr}" do
-          @valid[:numbers].each do |n|
-            @valid[:numbers].each do |d|
-              str = expr.gsub('n',"#{n}")
-              str = str.gsub('d',"#{d}")
-              @parser.parse(str).should_not be nil
-            end
-          end
-        end
-      end
-    end
-  end
-
-  context "duration only" do
-    context 'valid (non-zero) numerator and denominator' do
-      ["n","n/","n/d","/d"].each do |expr|
-        it "should parse durations of the form #{expr}" do
-          @valid[:numbers].each do |n|
-            @valid[:numbers].each do |d|
-              str = expr.gsub('n',"#{n}")
-              str = str.gsub('d',"#{d}")
-              @parser.parse(str).should_not be nil
-            end
-          end
-        end
-      end
-    end
-
-    context 'invalid (zero) numerator and valid denominator' do
-      ["n","n/","n/d"].each do |expr|
-        it "should parse durations of the form #{expr}" do
-          @invalid[:numbers].each do |n|
-            @valid[:numbers].each do |d|
-              str = expr.gsub('n',"#{n}")
-              str = str.gsub('d',"#{d}")
-              @parser.parse(str).should be nil
-            end
-          end
-        end
-      end
-    end
-    
-    context 'valid numerator and invalid (zero) denominator' do
-      ["n/d","/d"].each do |expr|
-        it "should parse durations of the form #{expr}" do
-          @valid[:numbers].each do |n|
-            @invalid[:numbers].each do |d|
-              str = expr.gsub('n',"#{n}")
-              str = str.gsub('d',"#{d}")
-              @parser.parse(str).should be nil
-            end
-          end
-        end
-      end
-    end
-    
-    context 'invalid numerator and invalid denominator' do
-      ["n","n/","n/d","/d"].each do |expr|
-        it "should parse durations of the form #{expr}" do
-          @invalid[:numbers].each do |n|
-            @invalid[:numbers].each do |d|
-              str = expr.gsub('n',"#{n}")
-              str = str.gsub('d',"#{d}")
-              @parser.parse(str).should be nil
-            end
-          end
-        end
-      end
+    it 'should parse' do
+      @parser.parse("1/4").should_not be nil
     end
   end
   
-  context 'accent and duration' do
+  context 'duration and accent' do
     context 'valid accent marker' do
       it 'should parse' do
         @valid[:accents].each do |accent|
@@ -179,7 +111,7 @@ describe NoteParser do
       context 'without link marker' do
         it 'should parse' do
           @valid[:pitches].each do |pitch|
-            str = "1/4@#{pitch}"
+            str = "1/4#{pitch}"
             @parser.parse(str).should_not be nil
           end
         end
@@ -190,7 +122,7 @@ describe NoteParser do
           it 'should parse' do
             @valid[:pitches].each do |pitch|
               @valid[:links].each do |link|
-                str = "1/4@#{pitch}#{link}"
+                str = "1/4#{pitch}#{link}#{pitch}"
                 @parser.parse(str).should_not be nil
               end
             end
@@ -201,7 +133,7 @@ describe NoteParser do
           it 'should not parse' do
             @valid[:pitches].each do |pitch|
               @invalid[:links].each do |link|
-                str = "1/4@#{pitch}#{link}"
+                str = "1/4#{pitch}#{link}#{pitch}"
                 @parser.parse(str).should be nil
               end
             end
@@ -214,7 +146,7 @@ describe NoteParser do
       context 'without link marker' do
         it 'should parse' do
           @invalid[:pitches].each do |pitch|
-            str = "1/4@#{pitch}"
+            str = "1/4#{pitch}"
             @parser.parse(str).should be nil
           end
         end
@@ -224,7 +156,7 @@ describe NoteParser do
         it 'should not parse' do
           @invalid[:pitches].each do |pitch|
             @valid[:links].each do |link|
-              str = "1/4@#{pitch}#{link}"
+              str = "1/4#{pitch}#{link}#{pitch}"
               @parser.parse(str).should be nil
             end
           end

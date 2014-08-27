@@ -7,8 +7,24 @@ grammar Note
   include Duration
   
   rule note
-    duration ("@" pitch link? ("," pitch link?)*)? (accent)? 
-  end  
+    chord / single_pitch / rest
+  end
+
+  rule rest
+    duration (accent)? <RestNode>
+  end
+  
+  rule single_pitch
+    duration pl:pitch_link (accent)? <SinglePitchNode>
+  end
+  
+  rule chord
+    duration pl:pitch_link more_pitches:("," pl:pitch_link)+ (accent)? <ChordNode>
+  end
+
+  rule pitch_link
+    pitch the_link:link?
+  end
 end
 
 end

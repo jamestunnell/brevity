@@ -83,9 +83,9 @@ As an example, some stocatto notes:
 \subsection{Relationships}
 Note relationships (or links) control the transition between sequential notes. A link is just between two notes, and won't have any other effect outside those notes. A link marker is placed just after a note pitch. Here is an example of a passage connected by slurs:
 \begin{center}
-\verb|/4C4= /16C4= /16E4= /4F4|
+\verb|/4C4=C4 /16C4=E4 /16E4=F4 /4F4|
 \end{center}
-In addition, if the following note contains multiple pitches, the link's target pitch must be specified as well. Here is an example of this, using slur/tie links:
+Here is an example using slur/tie links:
 \begin{center}
 \verb|/4C4=C4 /16C4=E4,F4=G4 /16E4,G4|
 \end{center}
@@ -115,7 +115,7 @@ Table~\ref{tab:link_markers} lists the supported link types and the characters u
 \section{Sequences}
 A sequence is a series of notes/rests. A sequence is declared by placing notes/rests together and separating by spaces, as in 
 \begin{center}
-\verb|/4D6 /4A5 /16Ab6 3/16Bb6= /4Bb6|
+\verb|/4D6 /4A5 /16Ab6 3/16Bb6=Bb6 /4Bb6|
 \end{center}
 
 A sequence can either be labeled for later reused, or modified to produce a new sequence.

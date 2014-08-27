@@ -2,7 +2,7 @@ module Brevity
 
 grammar Pitch
   rule pitch
-    [A-Ga-g] [#b]? [0-9]
+    [A-Ga-g] [#b]? [0-9] <PitchNode>
   end
 end
 
