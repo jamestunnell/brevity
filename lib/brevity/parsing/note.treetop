@@ -5,21 +5,21 @@ grammar Note
   include Accent
   include Link
   include Duration
-  
+
   rule note
-    chord / single_pitch / rest
+    polyphonic_note / monophonic_note / rest_note
   end
 
-  rule rest
-    duration (accent)? <RestNode>
+  rule rest_note
+    duration (accent)? <RestNoteNode>
   end
   
-  rule single_pitch
-    duration pl:pitch_link (accent)? <SinglePitchNode>
+  rule monophonic_note
+    duration pl:pitch_link (accent)? <MonophonicNoteNode>
   end
   
-  rule chord
-    duration pl:pitch_link more_pitches:("," pl:pitch_link)+ (accent)? <ChordNode>
+  rule polyphonic_note
+    duration pl:pitch_link more_pitches:("," pl:pitch_link)+ (accent)? <PolyphonicNoteNode>
   end
 
   rule pitch_link

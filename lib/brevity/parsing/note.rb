@@ -30,17 +30,17 @@ module Note
     end
 
     i0 = index
-    r1 = _nt_chord
+    r1 = _nt_polyphonic_note
     if r1
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      r2 = _nt_single_pitch
+      r2 = _nt_monophonic_note
       if r2
         r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
-        r3 = _nt_rest
+        r3 = _nt_rest_note
         if r3
           r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
@@ -56,19 +56,19 @@ module Note
     r0
   end
 
-  module Rest0
+  module RestNote0
     def duration
       elements[0]
     end
 
   end
 
-  def _nt_rest
+  def _nt_rest_note
     start_index = index
-    if node_cache[:rest].has_key?(index)
-      cached = node_cache[:rest][index]
+    if node_cache[:rest_note].has_key?(index)
+      cached = node_cache[:rest_note][index]
       if cached
-        node_cache[:rest][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:rest_note][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -87,19 +87,19 @@ module Note
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(RestNode,input, i0...index, s0)
-      r0.extend(Rest0)
+      r0 = instantiate_node(RestNoteNode,input, i0...index, s0)
+      r0.extend(RestNote0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:rest][start_index] = r0
+    node_cache[:rest_note][start_index] = r0
 
     r0
   end
 
-  module SinglePitch0
+  module MonophonicNote0
     def duration
       elements[0]
     end
@@ -110,12 +110,12 @@ module Note
 
   end
 
-  def _nt_single_pitch
+  def _nt_monophonic_note
     start_index = index
-    if node_cache[:single_pitch].has_key?(index)
-      cached = node_cache[:single_pitch][index]
+    if node_cache[:monophonic_note].has_key?(index)
+      cached = node_cache[:monophonic_note][index]
       if cached
-        node_cache[:single_pitch][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:monophonic_note][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -138,25 +138,25 @@ module Note
       end
     end
     if s0.last
-      r0 = instantiate_node(SinglePitchNode,input, i0...index, s0)
-      r0.extend(SinglePitch0)
+      r0 = instantiate_node(MonophonicNoteNode,input, i0...index, s0)
+      r0.extend(MonophonicNote0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:single_pitch][start_index] = r0
+    node_cache[:monophonic_note][start_index] = r0
 
     r0
   end
 
-  module Chord0
+  module PolyphonicNote0
     def pl
       elements[1]
     end
   end
 
-  module Chord1
+  module PolyphonicNote1
     def duration
       elements[0]
     end
@@ -171,12 +171,12 @@ module Note
 
   end
 
-  def _nt_chord
+  def _nt_polyphonic_note
     start_index = index
-    if node_cache[:chord].has_key?(index)
-      cached = node_cache[:chord][index]
+    if node_cache[:polyphonic_note].has_key?(index)
+      cached = node_cache[:polyphonic_note][index]
       if cached
-        node_cache[:chord][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:polyphonic_note][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -206,7 +206,7 @@ module Note
           end
           if s4.last
             r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-            r4.extend(Chord0)
+            r4.extend(PolyphonicNote0)
           else
             @index = i4
             r4 = nil
@@ -236,14 +236,14 @@ module Note
       end
     end
     if s0.last
-      r0 = instantiate_node(ChordNode,input, i0...index, s0)
-      r0.extend(Chord1)
+      r0 = instantiate_node(PolyphonicNoteNode,input, i0...index, s0)
+      r0.extend(PolyphonicNote1)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:chord][start_index] = r0
+    node_cache[:polyphonic_note][start_index] = r0
 
     r0
   end

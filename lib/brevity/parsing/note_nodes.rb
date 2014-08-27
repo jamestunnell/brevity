@@ -1,13 +1,13 @@
 require 'music-transcription'
 
 module Brevity
-  class RestNode < Treetop::Runtime::SyntaxNode
+  class RestNoteNode < Treetop::Runtime::SyntaxNode
     def to_note
       Music::Transcription::Note.new(duration.to_r)
     end
   end
 
-  class SinglePitchNode < Treetop::Runtime::SyntaxNode
+  class MonophonicNoteNode < Treetop::Runtime::SyntaxNode
     def to_note
       pitches = [ pl.pitch.to_pitch ]
       links = {}
@@ -18,7 +18,7 @@ module Brevity
     end
   end
 
-  class ChordNode < Treetop::Runtime::SyntaxNode
+  class PolyphonicNoteNode < Treetop::Runtime::SyntaxNode
     def to_note
       pitches = [ pl.pitch.to_pitch ]
       links = {}
@@ -27,9 +27,9 @@ module Brevity
       end
       
       more_pitches.elements.each do |mp|
-        pitches.push mp.pl.to_pitch
+        pitches.push mp.pl.pitch.to_pitch
         unless mp.pl.the_link.empty?
-          links[pitchs[-1]] = mp.pl.the_link.to_link
+          links[pitches[-1]] = mp.pl.the_link.to_link
         end
       end
       
