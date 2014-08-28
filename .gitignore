@@ -3,3 +3,6 @@ doc/
 pkg/
 bin/
 vendor/cache/*.gem
+.bundle/*
+bundler_stubs/*
+
