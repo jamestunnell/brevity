@@ -1,0 +1,16 @@
+module Brevity
+
+grammar Sequence
+  include Dynamic
+  include Note
+  
+  rule sequence
+    [\s]* spaced_notes:(note [\s]*)+ <SequenceNode>
+  end
+  
+  #rule sequence
+  #  bulk:([\s]* dynamic? [\s]* note)* [\s]* end_dyn:dynamic? <SequenceNode>
+  #end
+end
+
+end
