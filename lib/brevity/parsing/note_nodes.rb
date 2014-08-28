@@ -5,8 +5,8 @@ class String
       accent = Music::Transcription::Accent::Stacatto.new
     when "'"
       accent = Music::Transcription::Accent::Stacattissimo.new
-    #when ">"
-    #  accent = Music::Transcription::Accent::Marcato.new
+    when ">"
+      accent = Music::Transcription::Accent::Marcato.new
     when "^"
       accent = Music::Transcription::Accent::Martellato.new
     when "_"

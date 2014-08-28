@@ -36,7 +36,7 @@ describe MonophonicNoteNode do
   {
     '/2C2=C2' => Note.new(Rational(1,2),[C2],links:{C2=>Link::Slur.new(C2)}),
     '4/2D#6^' => Note.new(Rational(4,2),[Eb6],accent:Accent::Martellato.new),
-    '28Eb7' => Note.new(Rational(28,1),[Eb7]),
+    '28Eb7>' => Note.new(Rational(28,1),[Eb7],accent:Accent::Marcato.new),
     '56/33B1.' => Note.new(Rational(56,33),[B1],accent:Accent::Stacatto.new),
   }.each do |str,tgt|
     res = parser.parse(str)
