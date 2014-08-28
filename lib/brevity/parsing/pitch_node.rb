@@ -1,5 +1,3 @@
-require 'music-transcription'
-
 module Brevity
   class PitchNode < Treetop::Runtime::SyntaxNode
     def to_pitch

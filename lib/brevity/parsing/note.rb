@@ -60,7 +60,6 @@ module Note
     def duration
       elements[0]
     end
-
   end
 
   def _nt_rest_note
@@ -77,15 +76,6 @@ module Note
     i0, s0 = index, []
     r1 = _nt_duration
     s0 << r1
-    if r1
-      r3 = _nt_accent
-      if r3
-        r2 = r3
-      else
-        r2 = instantiate_node(SyntaxNode,input, index...index)
-      end
-      s0 << r2
-    end
     if s0.last
       r0 = instantiate_node(RestNoteNode,input, i0...index, s0)
       r0.extend(RestNote0)
@@ -108,6 +98,9 @@ module Note
       elements[1]
     end
 
+    def acc
+      elements[2]
+    end
   end
 
   def _nt_monophonic_note
@@ -169,6 +162,9 @@ module Note
       elements[2]
     end
 
+    def acc
+      elements[3]
+    end
   end
 
   def _nt_polyphonic_note

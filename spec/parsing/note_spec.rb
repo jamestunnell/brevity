@@ -81,30 +81,6 @@ describe NoteParser do
       @parser.parse("1/4").should_not be nil
     end
   end
-  
-  context 'duration and accent' do
-    context 'valid accent marker' do
-      it 'should parse' do
-        @valid[:accents].each do |accent|
-          ["1","1/4","/4","1/"].each do |duration|
-            str = "#{duration}#{accent}"
-            @parser.parse(str).should_not be nil
-          end
-        end
-      end
-    end
-    
-    context 'invalid accent marker' do
-      it 'should not parse' do
-        @invalid[:accents].each do |accent|
-          ["1","1/4","/4","1/"].each do |duration|
-            str = "#{accent}#{duration}"
-            @parser.parse(str).should be nil
-          end
-        end        
-      end
-    end
-  end
 
   context 'duration and one pitch' do
     context 'valid pitch' do
@@ -164,5 +140,49 @@ describe NoteParser do
       end
     end    
   end
-  
+
+  context 'duration and multiple pitches' do
+    context 'all valid pitches' do
+      context 'without links' do
+        it 'should parse' do
+          str = "4/" + @valid[:pitches].join(",")
+          @parser.parse(str).should_not be nil
+        end
+      end
+      
+      context 'with link marker' do
+        context 'link marker is valid' do
+          it 'should parse' do
+            @valid[:links].each do |link|
+              str = "4/" + @valid[:pitches].join("#{link}C4,")
+              @parser.parse(str).should_not be nil
+            end
+          end
+        end
+
+        context 'link marker is not valid' do
+          it 'should not parse' do
+            @invalid[:links].each do |link|
+              str = "4/" + @valid[:pitches].join("#{link}C4,")
+              @parser.parse(str).should be nil
+            end
+          end
+        end
+      end
+    end
+
+    context 'one invalid pitch' do
+      it 'should not parse' do
+        str = "4/" + ([@invalid[:pitches][0]] + @valid[:pitches]).join(",")
+        @parser.parse(str).should be nil
+      end
+    end    
+
+    context 'all invalid pitches' do
+      it 'should not parse' do
+        str = "4/" + @invalid[:pitches].join(",")
+        @parser.parse(str).should be nil
+      end
+    end    
+  end  
 end

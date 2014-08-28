@@ -1,6 +1,8 @@
 require 'brevity/version'
 
 require 'treetop'
+require 'music-transcription'
+
 require 'brevity/parsing/accent'
 require 'brevity/parsing/pitch'
 require 'brevity/parsing/pitch_node'

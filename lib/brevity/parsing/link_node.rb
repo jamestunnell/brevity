@@ -1,5 +1,3 @@
-require 'music-transcription'
-
 module Brevity
   class LinkNode < Treetop::Runtime::SyntaxNode
     def to_link

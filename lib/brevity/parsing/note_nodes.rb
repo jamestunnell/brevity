@@ -1,8 +1,26 @@
-require 'music-transcription'
+class String
+  def to_accent
+    case self
+    when "."
+      accent = Music::Transcription::Accent::Stacatto.new
+    when "'"
+      accent = Music::Transcription::Accent::Stacattissimo.new
+    #when ">"
+    #  accent = Music::Transcription::Accent::Marcato.new
+    when "^"
+      accent = Music::Transcription::Accent::Martellato.new
+    when "_"
+      accent = Music::Transcription::Accent::Tenuto.new
+    else
+      raise RuntimeError, "no accent found for #{self}"
+    end
+  end
+end
 
 module Brevity
+  
   class RestNoteNode < Treetop::Runtime::SyntaxNode
-    def to_note
+    def to_note    
       Music::Transcription::Note.new(duration.to_r)
     end
   end
@@ -14,7 +32,13 @@ module Brevity
       unless pl.the_link.empty?
         links[pitches[0]] = pl.the_link.to_link
       end
-      Music::Transcription::Note.new(duration.to_r,pitches,links:links)
+      
+      if acc.empty?
+        Music::Transcription::Note.new(duration.to_r,pitches,links:links)
+      else
+        accent = acc.text_value.to_accent
+        Music::Transcription::Note.new(duration.to_r,pitches,links:links,accent:accent)
+      end
     end
   end
 
@@ -33,7 +57,12 @@ module Brevity
         end
       end
       
-      Music::Transcription::Note.new(duration.to_r,pitches,links:links)      
+      if acc.empty?
+        Music::Transcription::Note.new(duration.to_r,pitches,links:links)
+      else
+        accent = acc.text_value.to_accent
+        Music::Transcription::Note.new(duration.to_r,pitches,links:links,accent:accent)
+      end
     end
   end
 end

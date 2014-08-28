@@ -11,15 +11,15 @@ grammar Note
   end
 
   rule rest_note
-    duration (accent)? <RestNoteNode>
+    duration:duration <RestNoteNode>
   end
   
   rule monophonic_note
-    duration pl:pitch_link (accent)? <MonophonicNoteNode>
+    duration pl:pitch_link acc:(accent)? <MonophonicNoteNode>
   end
   
   rule polyphonic_note
-    duration pl:pitch_link more_pitches:("," pl:pitch_link)+ (accent)? <PolyphonicNoteNode>
+    duration pl:pitch_link more_pitches:("," pl:pitch_link)+ acc:(accent)? <PolyphonicNoteNode>
   end
 
   rule pitch_link
