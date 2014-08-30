@@ -2,9 +2,9 @@ class String
   def to_accent
     case self
     when "."
-      accent = Music::Transcription::Accent::Stacatto.new
+      accent = Music::Transcription::Accent::Staccato.new
     when "'"
-      accent = Music::Transcription::Accent::Stacattissimo.new
+      accent = Music::Transcription::Accent::Staccatissimo.new
     when ">"
       accent = Music::Transcription::Accent::Marcato.new
     when "^"

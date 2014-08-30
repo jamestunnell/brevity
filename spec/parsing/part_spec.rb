@@ -6,24 +6,8 @@ describe PartParser do
   end
   
   context "label only" do
-    it 'should parse "james:"' do
-      @parser.parse("james:").should_not be nil
-    end
-    
-    it 'should parse "_fondue:"' do
-      @parser.parse("_fondue:").should_not be nil
-    end
-    
-    it 'should parse "Guitar1:"' do
-      @parser.parse("Guitar1:").should_not be nil
-    end
-    
-    it 'should parse "_3gbaA1DSo:"' do
-      @parser.parse("_3gbaA1DSo:").should_not be nil
-    end
-    
-    it 'should not parse "3afd:"' do
-      @parser.parse("3afd:").should be nil
+    it 'should not parse' do
+      @parser.parse("james:").should be nil
     end
   end
   
@@ -41,13 +25,13 @@ describe PartParser do
     end
   end
   
-  context 'one note plus dynamic change' do
-    it 'should parse "sax: mp 1C4"' do
-      @parser.parse("sax: mp 1C4").should_not be nil
-    end
-    
-    it 'should parse "sax: mp< 1C4 ff"' do
-      @parser.parse("sax: mp< 1C4 ff").should_not be nil
-    end
-  end
+  #context 'one note plus dynamic change' do
+  #  it 'should parse "sax: mp 1C4"' do
+  #    @parser.parse("sax: mp 1C4").should_not be nil
+  #  end
+  #  
+  #  it 'should parse "sax: mp< 1C4 ff"' do
+  #    @parser.parse("sax: mp< 1C4 ff").should_not be nil
+  #  end
+  #end
 end

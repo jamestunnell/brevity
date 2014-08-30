@@ -1,0 +1,41 @@
+module Brevity
+
+grammar DynamicLevel
+  rule dynamic_level
+    ppp / pp / p / mp / mf / fff / ff / f
+  end
+  
+  rule ppp
+    "ppp" <PianississimoNode>
+  end
+  
+  rule pp
+    "pp" <PianissimoNode>
+  end
+  
+  rule p
+    "p" <PianoNode>
+  end
+  
+  rule mp
+    "mp" <MezzoPianoNode>
+  end
+  
+  rule mf
+    "mf" <MezzoForteNode>
+  end
+  
+  rule f
+    "f" <ForteNode>
+  end
+  
+  rule ff
+    "ff" <FortissimoNode>
+  end
+  
+  rule fff
+    "fff" <FortississimoNode>
+  end
+end
+
+end

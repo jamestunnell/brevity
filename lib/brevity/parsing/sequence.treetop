@@ -1,7 +1,7 @@
 module Brevity
 
 grammar Sequence
-  include Dynamic
+  #include Dynamic
   include Note
   
   rule sequence
