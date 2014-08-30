@@ -10,8 +10,6 @@ module Sequence
     @root ||= :sequence
   end
 
-  include Dynamic
-
   include Note
 
   module Sequence0

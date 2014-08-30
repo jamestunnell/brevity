@@ -4,10 +4,10 @@ describe LinkNode do
   parser = LinkParser.new
   
   {
-    '=C4' => Music::Transcription::Link::Slur.new(Music::Transcription::C4),
-    '/Db2' => Music::Transcription::Link::Portamento.new(Music::Transcription::Db2),
-    '~C#2' => Music::Transcription::Link::Glissando.new(Music::Transcription::Db2),
-    '-Db2' => Music::Transcription::Link::Legato.new(Music::Transcription::Db2),
+    '=C4' => Link::Slur.new(C4),
+    '/Db2' => Link::Portamento.new(Db2),
+    '~C#2' => Link::Glissando.new(Db2),
+    '-Db2' => Link::Legato.new(Db2),
   }.each do |str,tgt|
     res = parser.parse(str)
     context str do
@@ -17,8 +17,8 @@ describe LinkNode do
       
       describe '#to_pitch' do
         l = res.to_link
-        it 'should produce a Music::Transcription::Link object' do
-          l.should be_a Music::Transcription::Link
+        it 'should produce a Link object' do
+          l.should be_a Link
         end
         
         it 'should produce pitch matching input str' do

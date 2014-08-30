@@ -1,16 +1,12 @@
 module Brevity
 
 grammar Part
-  include Dynamic
-  include Note
+  include Sequence
+  include Label
   
   rule part
-    label ":" ([\s]* dynamic? [\s]* note)* [\s]* dynamic?
-  end
-  
-  rule label
-    [_A-Za-z] [_A-Za-z0-9]*
-  end
+    label ":" sequence
+  end  
 end
 
 end
