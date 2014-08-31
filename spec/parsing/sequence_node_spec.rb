@@ -47,4 +47,40 @@ describe SequenceNode do
       end
     end
   end
+  
+  describe '#to_part' do
+    context 'start dynamic given' do
+      context 'start dynamic in sequence' do
+        it 'should use start dynamic in sequence' do
+          start_dynamic = Dynamics::PPP
+          part = parser.parse('fff /4').to_part(start_dynamic)
+          part.dynamic_profile.start_value.should eq Dynamics::FFF
+        end
+      end
+      
+      context 'no start dynamic in sequence' do
+        it 'should use start dynamic given' do
+          start_dynamic = Dynamics::PPP
+          part = parser.parse('/4 /4').to_part(start_dynamic)
+          part.dynamic_profile.start_value.should eq start_dynamic
+        end
+      end
+    end
+    
+    context 'no start dynamic given' do
+      context 'start dynamic in sequence' do
+        it 'should use start dynamic in sequence' do
+          part = parser.parse('fff /4').to_part
+          part.dynamic_profile.start_value.should eq Dynamics::FFF
+        end
+      end
+      
+      context 'no start dynamic in sequence' do
+        it 'should use default start dynamic' do
+          part = parser.parse('/4 /4').to_part
+          part.dynamic_profile.start_value.should eq DEFAULT_START_DYNAMIC
+        end
+      end
+    end
+  end
 end

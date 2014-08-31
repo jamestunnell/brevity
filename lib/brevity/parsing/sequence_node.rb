@@ -3,7 +3,7 @@ module Brevity
   DEFAULT_START_DYNAMIC = Music::Transcription::Dynamics::MF
   
   class SequenceNode < Treetop::Runtime::SyntaxNode
-    def to_part
+    def to_part(start_dynamic = nil)
       notes = [ first_note.to_note ]      
       offset = notes[-1].duration
       dyn_changes = {}
@@ -23,7 +23,9 @@ module Brevity
       end
       
       if start_dyn.empty?
-        start_dynamic = DEFAULT_START_DYNAMIC
+        if start_dynamic.nil?
+          start_dynamic = DEFAULT_START_DYNAMIC
+        end
       else
         start_dynamic = start_dyn.dynamic_level.to_dynamic
       end
