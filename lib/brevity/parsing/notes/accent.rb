@@ -15,16 +15,17 @@ module Accent
     if node_cache[:accent].has_key?(index)
       cached = node_cache[:accent][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:accent][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('\G[.\'>^_]', true, index)
+    if has_terminal?(@regexps[gr = '\A[.\'>^_]'] ||= Regexp.new(gr), :regexp, index)
       r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
       @index += 1
     else
+      terminal_parse_failure('[.\'>^_]')
       r0 = nil
     end
 

@@ -32,10 +32,16 @@ task :doc => :yard
 
 require "bundler/gem_tasks"
 
+def rb_fname fname
+  basename = File.basename(fname, File.extname(fname))
+  dirname = File.dirname(fname)
+  "#{dirname}/#{basename}.rb"
+end
+  
 task :build_parsers do
   wd = Dir.pwd
   Dir.chdir "lib/brevity/parsing"
-  parser_files = Dir.glob(["*.treetop","*.tt"])
+  parser_files = Dir.glob(["**/*.treetop","**/*.tt"])
   
   if parser_files.empty?
     puts "No parsers found"
@@ -43,16 +49,14 @@ task :build_parsers do
   end
 
   build_list = parser_files.select do |fname|
-    basename = File.basename(fname, File.extname(fname))
-    rb_name = "#{basename}.rb"
+    rb_name = rb_fname(fname)
     !File.exists?(rb_name) || (File.mtime(fname) > File.mtime(rb_name))
   end
   
   if build_list.any?
     puts "building parsers:"
     build_list.each do |fname|
-      basename = File.basename(fname, File.extname(fname))
-      puts "  #{fname} -> #{basename}.rb"
+      puts "  #{fname} -> #{rb_fname(fname)}"
       `tt -f #{fname}`
     end
   else

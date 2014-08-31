@@ -18,7 +18,7 @@ module Nonzero
     if node_cache[:nonzero_number].has_key?(index)
       cached = node_cache[:nonzero_number][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:nonzero_number][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -27,10 +27,11 @@ module Nonzero
     i0, s0 = index, []
     s1, i1 = [], index
     loop do
-      if has_terminal?('\G[0]', true, index)
+      if has_terminal?(@regexps[gr = '\A[0]'] ||= Regexp.new(gr), :regexp, index)
         r2 = true
         @index += 1
       else
+        terminal_parse_failure('[0]')
         r2 = nil
       end
       if r2
@@ -42,20 +43,22 @@ module Nonzero
     r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
     s0 << r1
     if r1
-      if has_terminal?('\G[1-9]', true, index)
+      if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
         r3 = true
         @index += 1
       else
+        terminal_parse_failure('[1-9]')
         r3 = nil
       end
       s0 << r3
       if r3
         s4, i4 = [], index
         loop do
-          if has_terminal?('\G[0-9]', true, index)
+          if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
             r5 = true
             @index += 1
           else
+            terminal_parse_failure('[0-9]')
             r5 = nil
           end
           if r5
