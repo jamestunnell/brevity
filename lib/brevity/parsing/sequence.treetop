@@ -2,14 +2,12 @@ module Brevity
 
 grammar Sequence
   include Note
+  include DynamicLevel
+  include DynamicChange
   
   rule sequence
-    [\s]* spaced_notes:(note [\s]*)+ <SequenceNode>
+    start_dyn:(dynamic_level [\s]+)? first_note:note more:([\s]+ dyn_change:(dynamic_change [\s]+)? note)* end_dyn_change:([\s]+ dynamic_change)? <SequenceNode>
   end
-  
-  #rule sequence
-  #  bulk:([\s]* dynamic? [\s]* note)* [\s]* end_dyn:dynamic? <SequenceNode>
-  #end
 end
 
 end

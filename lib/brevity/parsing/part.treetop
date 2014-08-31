@@ -5,7 +5,7 @@ grammar Part
   include Label
   
   rule part
-    label ":" sequence
+    label ":" [\s]* sequence
   end  
 end
 

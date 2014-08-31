@@ -5,20 +5,14 @@ describe SequenceParser do
     @parser = SequenceParser.new
   end
   
-  context 'notes only (no dynamics),' do
-    context 'all valid notes,' do
+  { 'notes separated by spaces' => ["/4A3. /4B3. /4C3","/2Bb2,D2,F2 /2G2,C2-Eb3 1Eb3"],
+    'notes and start dynamic' => ["mp /4A3. /4B3. /4C3","f /2Bb2,D2,F2 /2G2,C2-Eb3 1Eb3"],
+    'notes and dynamic changes' => ["/4A3. f /4B3. >p /4C3","/2Bb2,D2,F2 ff /2G2,C2-Eb3 1Eb3 > mp"],
+    'notes, start dynamic, and changes' => ["mp /4A3. f /4B3. >p /4C3","pp /2Bb2,D2,F2 ff /2G2,C2-Eb3 1Eb3 > mp"],
+  }.each do |descr,strs|
+    context descr do
       it 'should parse' do
-        ["/4A3. /4B3. /4C3","/2Bb2,D2,F2 /2G2,C2-Eb3 1Eb3"].each do |str|
-          @parser.parse(str).should_not be nil
-        end
-      end
-    end
-
-    context 'some invalid notes,' do
-      it 'should not parse' do
-        ["/4A3 /4B /4C3","/0Bb2,D2,F2 /2G2,C2 1Eb"].each do |str|
-          @parser.parse(str).should be nil
-        end
+        strs.each {|str| @parser.parse(str).should_not be nil }
       end
     end
   end

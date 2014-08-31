@@ -20,7 +20,7 @@ module Part
     end
 
     def sequence
-      elements[2]
+      elements[3]
     end
   end
 
@@ -48,8 +48,27 @@ module Part
       end
       s0 << r2
       if r2
-        r3 = _nt_sequence
+        s3, i3 = [], index
+        loop do
+          if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+            r4 = true
+            @index += 1
+          else
+            terminal_parse_failure('[\\s]')
+            r4 = nil
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
+        end
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
         s0 << r3
+        if r3
+          r5 = _nt_sequence
+          s0 << r5
+        end
       end
     end
     if s0.last

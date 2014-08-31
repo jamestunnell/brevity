@@ -12,16 +12,55 @@ module Sequence
 
   include Note
 
+  include DynamicLevel
+
+  include DynamicChange
+
   module Sequence0
-    def note
+    def dynamic_level
       elements[0]
     end
 
   end
 
   module Sequence1
-    def spaced_notes
+    def dynamic_change
+      elements[0]
+    end
+
+  end
+
+  module Sequence2
+    def dyn_change
       elements[1]
+    end
+
+    def note
+      elements[2]
+    end
+  end
+
+  module Sequence3
+    def dynamic_change
+      elements[1]
+    end
+  end
+
+  module Sequence4
+    def start_dyn
+      elements[0]
+    end
+
+    def first_note
+      elements[1]
+    end
+
+    def more
+      elements[2]
+    end
+
+    def end_dyn_change
+      elements[3]
     end
   end
 
@@ -37,72 +76,183 @@ module Sequence
     end
 
     i0, s0 = index, []
-    s1, i1 = [], index
-    loop do
-      if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
-        r2 = true
-        @index += 1
-      else
-        terminal_parse_failure('[\\s]')
-        r2 = nil
-      end
-      if r2
-        s1 << r2
-      else
-        break
-      end
-    end
-    r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
-    s0 << r1
-    if r1
-      s3, i3 = [], index
+    i2, s2 = index, []
+    r3 = _nt_dynamic_level
+    s2 << r3
+    if r3
+      s4, i4 = [], index
       loop do
-        i4, s4 = index, []
-        r5 = _nt_note
-        s4 << r5
-        if r5
-          s6, i6 = [], index
-          loop do
-            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
-              r7 = true
-              @index += 1
-            else
-              terminal_parse_failure('[\\s]')
-              r7 = nil
-            end
-            if r7
-              s6 << r7
-            else
-              break
-            end
-          end
-          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
-          s4 << r6
-        end
-        if s4.last
-          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-          r4.extend(Sequence0)
+        if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+          r5 = true
+          @index += 1
         else
-          @index = i4
-          r4 = nil
+          terminal_parse_failure('[\\s]')
+          r5 = nil
         end
-        if r4
-          s3 << r4
+        if r5
+          s4 << r5
         else
           break
         end
       end
-      if s3.empty?
-        @index = i3
-        r3 = nil
+      if s4.empty?
+        @index = i4
+        r4 = nil
       else
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
       end
-      s0 << r3
+      s2 << r4
+    end
+    if s2.last
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      r2.extend(Sequence0)
+    else
+      @index = i2
+      r2 = nil
+    end
+    if r2
+      r1 = r2
+    else
+      r1 = instantiate_node(SyntaxNode,input, index...index)
+    end
+    s0 << r1
+    if r1
+      r6 = _nt_note
+      s0 << r6
+      if r6
+        s7, i7 = [], index
+        loop do
+          i8, s8 = index, []
+          s9, i9 = [], index
+          loop do
+            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+              r10 = true
+              @index += 1
+            else
+              terminal_parse_failure('[\\s]')
+              r10 = nil
+            end
+            if r10
+              s9 << r10
+            else
+              break
+            end
+          end
+          if s9.empty?
+            @index = i9
+            r9 = nil
+          else
+            r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+          end
+          s8 << r9
+          if r9
+            i12, s12 = index, []
+            r13 = _nt_dynamic_change
+            s12 << r13
+            if r13
+              s14, i14 = [], index
+              loop do
+                if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+                  r15 = true
+                  @index += 1
+                else
+                  terminal_parse_failure('[\\s]')
+                  r15 = nil
+                end
+                if r15
+                  s14 << r15
+                else
+                  break
+                end
+              end
+              if s14.empty?
+                @index = i14
+                r14 = nil
+              else
+                r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
+              end
+              s12 << r14
+            end
+            if s12.last
+              r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
+              r12.extend(Sequence1)
+            else
+              @index = i12
+              r12 = nil
+            end
+            if r12
+              r11 = r12
+            else
+              r11 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s8 << r11
+            if r11
+              r16 = _nt_note
+              s8 << r16
+            end
+          end
+          if s8.last
+            r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+            r8.extend(Sequence2)
+          else
+            @index = i8
+            r8 = nil
+          end
+          if r8
+            s7 << r8
+          else
+            break
+          end
+        end
+        r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+        s0 << r7
+        if r7
+          i18, s18 = index, []
+          s19, i19 = [], index
+          loop do
+            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+              r20 = true
+              @index += 1
+            else
+              terminal_parse_failure('[\\s]')
+              r20 = nil
+            end
+            if r20
+              s19 << r20
+            else
+              break
+            end
+          end
+          if s19.empty?
+            @index = i19
+            r19 = nil
+          else
+            r19 = instantiate_node(SyntaxNode,input, i19...index, s19)
+          end
+          s18 << r19
+          if r19
+            r21 = _nt_dynamic_change
+            s18 << r21
+          end
+          if s18.last
+            r18 = instantiate_node(SyntaxNode,input, i18...index, s18)
+            r18.extend(Sequence3)
+          else
+            @index = i18
+            r18 = nil
+          end
+          if r18
+            r17 = r18
+          else
+            r17 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r17
+        end
+      end
     end
     if s0.last
       r0 = instantiate_node(SequenceNode,input, i0...index, s0)
-      r0.extend(Sequence1)
+      r0.extend(Sequence4)
     else
       @index = i0
       r0 = nil
