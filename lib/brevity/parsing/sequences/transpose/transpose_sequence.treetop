@@ -1,0 +1,12 @@
+module Brevity
+
+grammar TransposeSequence
+  include Sequence
+  include NonnegativeInteger
+  
+  rule tranpose_sequence
+    "(" [\s]* sequence [\s]* ")" op:[+-] nsem:nonnegative_integer <TransposeSequenceNode>
+  end
+end
+
+end
