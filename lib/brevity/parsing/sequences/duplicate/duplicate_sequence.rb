@@ -12,7 +12,7 @@ module DuplicateSequence
 
   include Sequence
 
-  include Nonzero
+  include PositiveInteger
 
   module DuplicateSequence0
     def sequence
@@ -93,7 +93,7 @@ module DuplicateSequence
             end
             s0 << r7
             if r7
-              r8 = _nt_nonzero_number
+              r8 = _nt_positive_integer
               s0 << r8
             end
           end

@@ -3,22 +3,27 @@
 
 module Brevity
 
-module Nonzero
+module PositiveInteger
   include Treetop::Runtime
 
   def root
-    @root ||= :nonzero_number
+    @root ||= :positive_integer
   end
 
-  module NonzeroNumber0
+  include NonnegativeInteger
+
+  module PositiveInteger0
+    def nonnegative_integer
+      elements[2]
+    end
   end
 
-  def _nt_nonzero_number
+  def _nt_positive_integer
     start_index = index
-    if node_cache[:nonzero_number].has_key?(index)
-      cached = node_cache[:nonzero_number][index]
+    if node_cache[:positive_integer].has_key?(index)
+      cached = node_cache[:positive_integer][index]
       if cached
-        node_cache[:nonzero_number][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:positive_integer][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -52,42 +57,27 @@ module Nonzero
       end
       s0 << r3
       if r3
-        s4, i4 = [], index
-        loop do
-          if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
-            r5 = true
-            @index += 1
-          else
-            terminal_parse_failure('[0-9]')
-            r5 = nil
-          end
-          if r5
-            s4 << r5
-          else
-            break
-          end
-        end
-        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        r4 = _nt_nonnegative_integer
         s0 << r4
       end
     end
     if s0.last
       r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-      r0.extend(NonzeroNumber0)
+      r0.extend(PositiveInteger0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:nonzero_number][start_index] = r0
+    node_cache[:positive_integer][start_index] = r0
 
     r0
   end
 
 end
 
-class NonzeroParser < Treetop::Runtime::CompiledParser
-  include Nonzero
+class PositiveIntegerParser < Treetop::Runtime::CompiledParser
+  include PositiveInteger
 end
 
 

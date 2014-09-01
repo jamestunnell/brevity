@@ -1,0 +1,11 @@
+module Brevity
+
+grammar PositiveInteger
+  include NonnegativeInteger
+  
+  rule positive_integer
+    [0]* [1-9] nonnegative_integer
+  end
+end
+
+end

@@ -10,7 +10,7 @@ module Duration
     @root ||= :duration
   end
 
-  include Nonzero
+  include PositiveInteger
 
   def _nt_duration
     start_index = index
@@ -51,11 +51,11 @@ module Duration
   end
 
   module NumAndDen0
-    def nonzero_number1
+    def positive_integer1
       elements[0]
     end
 
-    def nonzero_number2
+    def positive_integer2
       elements[2]
     end
   end
@@ -72,7 +72,7 @@ module Duration
     end
 
     i0, s0 = index, []
-    r1 = _nt_nonzero_number
+    r1 = _nt_positive_integer
     s0 << r1
     if r1
       if (match_len = has_terminal?("/", false, index))
@@ -84,7 +84,7 @@ module Duration
       end
       s0 << r2
       if r2
-        r3 = _nt_nonzero_number
+        r3 = _nt_positive_integer
         s0 << r3
       end
     end
@@ -120,7 +120,7 @@ module Duration
     end
 
     i0, s0 = index, []
-    r1 = _nt_nonzero_number
+    r1 = _nt_positive_integer
     s0 << r1
     if r1
       if (match_len = has_terminal?("/", false, index))
@@ -177,7 +177,7 @@ module Duration
     end
     s0 << r1
     if r1
-      r2 = _nt_nonzero_number
+      r2 = _nt_positive_integer
       s0 << r2
     end
     if s0.last

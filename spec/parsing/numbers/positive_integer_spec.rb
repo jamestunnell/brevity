@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe Nonzero do
+describe PositiveInteger do
   before :all do
-    @parser = NonzeroParser.new
+    @parser = PositiveIntegerParser.new
   end
   
   it 'should parse "1"' do
