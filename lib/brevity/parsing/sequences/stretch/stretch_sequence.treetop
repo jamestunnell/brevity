@@ -1,0 +1,12 @@
+module Brevity
+
+grammar StretchSequence
+  include Sequence
+  include Duration
+  
+  rule stretch_sequence
+    "(" [\s]* sequence [\s]* ")" op:[=*] duration <StretchSequenceNode>
+  end
+end
+
+end
