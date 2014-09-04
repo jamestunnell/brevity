@@ -1,0 +1,11 @@
+module Brevity
+
+grammar TransposeModifier
+  include NonnegativeInteger
+  
+  rule transpose_modifier
+    op:[+-] nsem:nonnegative_integer <TransposeModifierNode>
+  end
+end
+
+end

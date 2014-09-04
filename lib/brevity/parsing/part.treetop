@@ -1,11 +1,11 @@
 module Brevity
 
 grammar Part
-  include Sequence
+  include Expression
   include Label
   
   rule part
-    label ":" [\s]* sequence
+    label ":" [\s]* expression
   end  
 end
 

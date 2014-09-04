@@ -1,0 +1,11 @@
+module Brevity
+
+grammar DuplicateModifier
+  include PositiveInteger
+  
+  rule duplicate_modifier
+    ":" ntimes:positive_integer <DuplicateModifierNode>
+  end
+end
+
+end

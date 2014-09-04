@@ -1,0 +1,11 @@
+module Brevity
+
+grammar StretchModifier
+  include Duration
+  
+  rule stretch_modifier
+    op:[=*] duration <StretchModifierNode>
+  end
+end
+
+end

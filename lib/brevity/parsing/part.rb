@@ -10,7 +10,7 @@ module Part
     @root ||= :part
   end
 
-  include Sequence
+  include Expression
 
   include Label
 
@@ -19,7 +19,7 @@ module Part
       elements[0]
     end
 
-    def sequence
+    def expression
       elements[3]
     end
   end
@@ -66,7 +66,7 @@ module Part
         r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
         s0 << r3
         if r3
-          r5 = _nt_sequence
+          r5 = _nt_expression
           s0 << r5
         end
       end

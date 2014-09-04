@@ -1,0 +1,39 @@
+module Brevity
+
+grammar Expression
+  include Sequence
+  include Label
+  include DuplicateModifier
+  include TransposeModifier
+  include StretchModifier
+  
+  rule expression
+    single more:([\s]+ expression)* <ExpressionNode>
+  end
+
+  rule single
+    modified_expr / plain_expr
+  end
+  
+  rule plain_expr
+    grouped_expr / labeled_expr / sequence
+  end
+  
+  rule modified_expr
+    base:(grouped_expr / labeled_expr) modifier <ModifiedExprNode>
+  end
+  
+  rule grouped_expr
+    "(" [\s]* expression [\s]* ")" <GroupedExprNode>
+  end
+  
+  rule labeled_expr
+    ":" label <LabeledExprNode>
+  end
+  
+  rule modifier
+    transpose_modifier / duplicate_modifier / stretch_modifier
+  end
+end
+
+end
