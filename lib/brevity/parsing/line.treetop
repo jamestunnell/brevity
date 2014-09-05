@@ -1,0 +1,11 @@
+module Brevity
+
+grammar Line
+  include Part
+  
+  rule line
+    [\s]* part [\s]* <LineNode>
+  end
+end
+
+end
