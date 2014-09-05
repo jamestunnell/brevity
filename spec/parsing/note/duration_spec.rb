@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe DurationParser do
   before :all do
-    @parser = DurationParser.new
     @valid = {
       :numbers => [1,5,50,3999,01,0010,0000005050],
     }
@@ -19,7 +18,7 @@ describe DurationParser do
           @valid[:numbers].each do |d|
             str = expr.gsub('n',"#{n}")
             str = str.gsub('d',"#{d}")
-            @parser.parse(str).should_not be nil
+            DUR_PARSER.parse(str).should_not be nil
           end
         end
       end
@@ -33,7 +32,7 @@ describe DurationParser do
           @valid[:numbers].each do |d|
             str = expr.gsub('n',"#{n}")
             str = str.gsub('d',"#{d}")
-            @parser.parse(str).should be nil
+            DUR_PARSER.parse(str).should be nil
           end
         end
       end
@@ -47,7 +46,7 @@ describe DurationParser do
           @invalid[:numbers].each do |d|
             str = expr.gsub('n',"#{n}")
             str = str.gsub('d',"#{d}")
-            @parser.parse(str).should be nil
+            DUR_PARSER.parse(str).should be nil
           end
         end
       end
@@ -61,7 +60,7 @@ describe DurationParser do
           @invalid[:numbers].each do |d|
             str = expr.gsub('n',"#{n}")
             str = str.gsub('d',"#{d}")
-            @parser.parse(str).should be nil
+            DUR_PARSER.parse(str).should be nil
           end
         end
       end

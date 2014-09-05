@@ -158,7 +158,7 @@ module Expression
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      r2 = _nt_labeled_expr
+      r2 = _nt_label_expr
       if r2
         r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
@@ -207,7 +207,7 @@ module Expression
       r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
       r1 = r2
     else
-      r3 = _nt_labeled_expr
+      r3 = _nt_label_expr
       if r3
         r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
         r1 = r3
@@ -326,18 +326,18 @@ module Expression
     r0
   end
 
-  module LabeledExpr0
+  module LabelExpr0
     def label
       elements[1]
     end
   end
 
-  def _nt_labeled_expr
+  def _nt_label_expr
     start_index = index
-    if node_cache[:labeled_expr].has_key?(index)
-      cached = node_cache[:labeled_expr][index]
+    if node_cache[:label_expr].has_key?(index)
+      cached = node_cache[:label_expr][index]
       if cached
-        node_cache[:labeled_expr][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:label_expr][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -357,14 +357,14 @@ module Expression
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(LabeledExprNode,input, i0...index, s0)
-      r0.extend(LabeledExpr0)
+      r0 = instantiate_node(LabelExprNode,input, i0...index, s0)
+      r0.extend(LabelExpr0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:labeled_expr][start_index] = r0
+    node_cache[:label_expr][start_index] = r0
 
     r0
   end

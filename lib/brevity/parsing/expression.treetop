@@ -16,19 +16,19 @@ grammar Expression
   end
   
   rule plain_expr
-    grouped_expr / labeled_expr / sequence
+    grouped_expr / label_expr / sequence
   end
   
   rule modified_expr
-    base:(grouped_expr / labeled_expr) modifier <ModifiedExprNode>
+    base:(grouped_expr / label_expr) modifier <ModifiedExprNode>
   end
   
   rule grouped_expr
     "(" [\s]* expression [\s]* ")" <GroupedExprNode>
   end
   
-  rule labeled_expr
-    ":" label <LabeledExprNode>
+  rule label_expr
+    ":" label <LabelExprNode>
   end
   
   rule modifier

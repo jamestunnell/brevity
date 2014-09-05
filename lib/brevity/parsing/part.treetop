@@ -5,8 +5,8 @@ grammar Part
   include Label
   
   rule part
-    label ":" [\s]* expression
-  end  
+    label ":" op:[=+] [\s]* expression <PartNode>
+  end
 end
 
 end

@@ -1,17 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-{ :duplicate => [DuplicateModifierParser,DuplicateModifierNode],
-  :transpose => [TransposeModifierParser,TransposeModifierNode],
-  :stretch => [StretchModifierParser,StretchModifierNode],
+{ :duplicate => [DuplicateModifierParser.new,DuplicateModifierNode],
+  :transpose => [TransposeModifierParser.new,TransposeModifierNode],
+  :stretch => [StretchModifierParser.new,StretchModifierNode],
 }.each do |modtype,classes|
-  parserclass, nodeclass = classes
-  seqparser = SequenceParser.new
+  modparser, nodeclass = classes
 
   describe nodeclass do
-    modparser = parserclass.new
-    
-    SEQUENCES.each do |seqstr|
-      src_part = seqparser.parse(seqstr).to_part({})
+    SEQUENCES.each do |seqstr,src_part|
       MODIFIERS[modtype].each do |modstr,modlambda|
         tgt_part = modlambda.call(src_part)
         modnode = modparser.parse(modstr)

@@ -1,14 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe NumDenNode do
-  parser = DurationParser.new
-  
   {
     '1/2' => Rational(1,2),
     '5/100' => Rational(5,100),
     '007/777' => Rational(7,777)
   }.each do |str,tgt|
-    res = parser.parse(str)
+    res = DUR_PARSER.parse(str)
     context str do
       it 'should parse as NumDenNode' do
         res.should be_a NumDenNode
@@ -29,14 +27,12 @@ describe NumDenNode do
 end
 
 describe NumOnlyNode do
-  parser = DurationParser.new
-  
   {
     '1/' => Rational(1,1),
     '5' => Rational(5,1),
     '007/' => Rational(7,1)
   }.each do |str,tgt|
-    res = parser.parse(str)
+    res = DUR_PARSER.parse(str)
     context str do
       it 'should parse as NumOnlyNode' do
         res.should be_a NumOnlyNode
@@ -57,14 +53,12 @@ describe NumOnlyNode do
 end
 
 describe DenOnlyNode do
-  parser = DurationParser.new
-  
   {
     '/2' => Rational(1,2),
     '/100' => Rational(1,100),
     '/777' => Rational(1,777)
   }.each do |str,tgt|
-    res = parser.parse(str)
+    res = DUR_PARSER.parse(str)
     context str do
       it 'should parse as DenOnlyNode' do
         res.should be_a DenOnlyNode

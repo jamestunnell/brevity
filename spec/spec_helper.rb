@@ -5,7 +5,33 @@ include Brevity
 include Music::Transcription
 include Pitches
 
-SEQUENCES = ['/2A7 /4C3 /4C3','/2A7']
+LABELS = ["riff","GUITAR2","_my_part_"]
+SEQUENCES = {
+  '/2A7 /4C3 /4D3' => Part.new(
+    notes: [ Note::Half.new([A7]), Note::Quarter.new([C3]), Note::Quarter.new([D3])],
+    dynamic_profile: Profile.new(DEFAULT_START_DYNAMIC)
+  ),
+  'mp /4A3. /4B3. /4C3' => Part.new(
+    notes: [
+      Note::Quarter.new([A3],accent: Accent::Staccato.new),
+      Note::Quarter.new([B3],accent: Accent::Staccato.new),
+      Note::Quarter.new([C3]),
+    ],
+    dynamic_profile: Profile.new(Dynamics::MP)
+  ),
+  "pp /2Bb2,D2,F2 ff /2G2,C2-Eb3 1Eb3 > mp" => Part.new(
+    notes: [
+      Note::Half.new([Bb2,D2,F2]),
+      Note::Half.new([G2,C2],links: {C2=>Link::Legato.new(Eb3)}),
+      Note::Whole.new([Eb3]),
+    ],
+    dynamic_profile: Profile.new(
+      Dynamics::PP,
+      "1/2".to_r => Change::Immediate.new(Dynamics::FF),
+      "2/1".to_r => Change::Gradual.new(Dynamics::MP),
+    )
+  )
+}
 
 MODIFIERS = {
   :duplicate => {
@@ -37,3 +63,9 @@ PARTS = [
     dynamic_profile: Profile.new(Dynamics::F, "1/4".to_r => Change::Immediate.new(Dynamics::MF))
   )
 ]
+
+SEQ_PARSER = SequenceParser.new
+PART_PARSER = PartParser.new
+EXPR_PARSER = ExpressionParser.new
+DUR_PARSER = DurationParser.new
+NOTE_PARSER = NoteParser.new

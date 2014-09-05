@@ -1,10 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'pry'
 describe ExpressionParser do
-  before :all do
-    @parser = ExpressionParser.new
-  end
-  
   literals = ['mp /4C4 /2 /4C4', 'ff /4C4 >f /4C4 <fff']
   labels = [':_famouslick_', ':RIFF2']
   grouped = (literals + labels).map {|str| "(#{str})" }
@@ -18,7 +14,7 @@ describe ExpressionParser do
     context "parsing #{strtype}," do
       strs.each do |str|
         it "should parse #{str}" do
-          res = @parser.parse(str)
+          res = EXPR_PARSER.parse(str)
           if res.nil?
             binding.pry
           end

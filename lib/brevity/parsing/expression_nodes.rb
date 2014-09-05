@@ -3,7 +3,7 @@ module Brevity
     def to_part(env_hash, start_dynamic = nil)
       part = single.to_part(env_hash, start_dynamic)
       more.elements.each do |el|
-        start_dynamic = part.last_value
+        start_dynamic = part.dynamic_profile.last_value
         part2 = el.expression.to_part(env_hash, start_dynamic)
         part.append! part2
       end
@@ -11,12 +11,13 @@ module Brevity
     end
   end
   
-  class LabeledExprNode < Treetop::Runtime::SyntaxNode
+  class LabelExprNode < Treetop::Runtime::SyntaxNode
     def to_part(env_hash, start_dynamic = nil)
-      if env_hash.has_key? label
-        return env_hash[label]
+      key = label.text_value.to_sym
+      if env_hash.has_key? key
+        return env_hash[key]
       else
-        raise ArgumentError, "No sequence found with label #{label}"
+        raise ArgumentError, "No part found with label #{key}"
       end
     end
   end
