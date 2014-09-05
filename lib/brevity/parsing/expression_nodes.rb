@@ -31,7 +31,10 @@ module Brevity
   class ModifiedExprNode < Treetop::Runtime::SyntaxNode
     def to_part(env_hash, start_dynamic = nil)
       part = base.to_part(env_hash,start_dynamic)
-      return modifier.process part
+      modifiers.elements.each do |modnode|
+        part = modnode.process part
+      end
+      return part
     end
   end
 end

@@ -20,7 +20,7 @@ grammar Expression
   end
   
   rule modified_expr
-    base:(grouped_expr / label_expr) modifier <ModifiedExprNode>
+    base:(grouped_expr / label_expr) modifiers:modifier+ <ModifiedExprNode>
   end
   
   rule grouped_expr

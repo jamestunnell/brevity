@@ -184,7 +184,7 @@ module Expression
       elements[0]
     end
 
-    def modifier
+    def modifiers
       elements[1]
     end
   end
@@ -218,7 +218,21 @@ module Expression
     end
     s0 << r1
     if r1
-      r4 = _nt_modifier
+      s4, i4 = [], index
+      loop do
+        r5 = _nt_modifier
+        if r5
+          s4 << r5
+        else
+          break
+        end
+      end
+      if s4.empty?
+        @index = i4
+        r4 = nil
+      else
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+      end
       s0 << r4
     end
     if s0.last

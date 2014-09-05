@@ -1,6 +1,44 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ExpressionNode do
+  describe '#to_part' do
+    context 'single sequence' do
+      it 'should be converted to part' do
+        SEQUENCES.each do |str,part|
+          EXPR_PARSER.parse(str).to_part({}).should eq part
+        end
+      end
+    end
+    
+    context 'composed sequences' do
+      it 'should combine them into a single part' do
+        pairs = SEQUENCES.entries
+        str = pairs[0][0]
+        part = pairs[0][1].clone
+        pairs[1..-1].each do |seqstr,seqpart|
+          str += " (#{seqstr})"
+          part.append! seqpart
+        end
+        EXPR_PARSER.parse(str).to_part({}).should eq part
+      end
+    end
+
+    context 'chained modifications' do
+      it 'should produce a single part, applying all modifications in sequence' do
+        str, part = SEQUENCES.first
+        str = "(#{str})"
+        part = part.clone
+        MODIFIERS.each do |modtype,modcases|
+          modstrs, modlambdas = modcases.entries.transpose
+          modstr = modstrs.join
+          tgt = part
+          modlambdas.each {|l| tgt = l.call(tgt) }
+          node = EXPR_PARSER.parse(str + modstr)
+          node.to_part({}).should eq(tgt)
+        end
+      end
+    end
+  end
 end
 
 describe LabelExprNode do
@@ -57,4 +95,21 @@ describe GroupedExprNode do
 end
 
 describe ModifiedExprNode do
+  describe '#to_part' do
+    SEQUENCES.each do |seqstr,seqpart|
+      MODIFIERS.each do |modtype,modcases|
+        context modtype do
+          modcases.each do |modstr,modlambda|
+            it 'should produce a modified part' do
+              str = "(#{seqstr})#{modstr}"
+              node = EXPR_PARSER.parse str
+              part = node.to_part({})
+              tgtpart = modlambda.call(seqpart)
+              part.should eq tgtpart
+            end
+          end
+        end
+      end
+    end
+  end
 end
