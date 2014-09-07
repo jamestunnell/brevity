@@ -53,7 +53,7 @@ module Label
       s0 << r2
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(LabelNode,input, i0...index, s0)
       r0.extend(Label0)
     else
       @index = i0

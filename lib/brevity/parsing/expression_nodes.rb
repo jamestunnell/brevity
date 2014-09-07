@@ -13,12 +13,7 @@ module Brevity
   
   class LabelExprNode < Treetop::Runtime::SyntaxNode
     def to_part(env_hash, start_dynamic = nil)
-      key = label.text_value.to_sym
-      if env_hash.has_key? key
-        return env_hash[key]
-      else
-        raise ArgumentError, "No part found with label #{key}"
-      end
+      env_hash.fetch(label.to_key)
     end
   end
   

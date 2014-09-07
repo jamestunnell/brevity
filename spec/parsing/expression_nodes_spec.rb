@@ -48,8 +48,8 @@ describe LabelExprNode do
       node = EXPR_PARSER.parse(str)
       
       context 'label not assigned yet' do
-        it 'should raise ArgumentError' do
-          expect { node.to_part({}) }.to raise_error(ArgumentError)
+        it 'should raise KeyError' do
+          expect { node.to_part({}) }.to raise_error(KeyError)
         end
       end
       

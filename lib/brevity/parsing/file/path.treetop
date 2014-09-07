@@ -1,0 +1,12 @@
+module Brevity
+
+grammar Path
+  rule path
+    ("./" / "/")? ((".." / name) "/")+ name
+  end
+  rule name
+    !("." / "..") [A-Za-z0-9_,:\.]+
+  end
+end
+
+end

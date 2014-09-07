@@ -5,6 +5,12 @@ include Brevity
 include Music::Transcription
 include Pitches
 
+RSpec::Matchers.define :parse do |str|
+  match do |parser|
+    !parser.parse(str).nil?
+  end
+end
+
 LABELS = ["riff","GUITAR2","_my_part_"]
 SEQUENCES = {
   '/2A7 /4C3 /4D3' => Part.new(
@@ -69,3 +75,6 @@ PART_PARSER = PartParser.new
 EXPR_PARSER = ExpressionParser.new
 DUR_PARSER = DurationParser.new
 NOTE_PARSER = NoteParser.new
+EXPORT_PARSER = ExportParser.new
+STRING_PARSER = StringParser.new
+LABEL_PARSER = LabelParser.new

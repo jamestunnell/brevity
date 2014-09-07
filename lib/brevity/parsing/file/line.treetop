@@ -2,9 +2,10 @@ module Brevity
 
 grammar Line
   include Part
+  include Export
   
   rule line
-    [\s]* part [\s]* <LineNode>
+    export / part
   end
 end
 

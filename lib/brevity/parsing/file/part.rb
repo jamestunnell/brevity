@@ -19,12 +19,8 @@ module Part
       elements[0]
     end
 
-    def op
-      elements[2]
-    end
-
     def expression
-      elements[4]
+      elements[3]
     end
   end
 
@@ -52,36 +48,26 @@ module Part
       end
       s0 << r2
       if r2
-        if has_terminal?(@regexps[gr = '\A[=+]'] ||= Regexp.new(gr), :regexp, index)
-          r3 = true
-          @index += 1
-        else
-          terminal_parse_failure('[=+]')
-          r3 = nil
+        s3, i3 = [], index
+        loop do
+          if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+            r4 = true
+            @index += 1
+          else
+            terminal_parse_failure('[\\s]')
+            r4 = nil
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
         end
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
         s0 << r3
         if r3
-          s4, i4 = [], index
-          loop do
-            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
-              r5 = true
-              @index += 1
-            else
-              terminal_parse_failure('[\\s]')
-              r5 = nil
-            end
-            if r5
-              s4 << r5
-            else
-              break
-            end
-          end
-          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-          s0 << r4
-          if r4
-            r6 = _nt_expression
-            s0 << r6
-          end
+          r5 = _nt_expression
+          s0 << r5
         end
       end
     end
