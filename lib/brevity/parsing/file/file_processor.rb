@@ -26,7 +26,7 @@ module Brevity
       
       node = @line_parser.parse(line.strip)
       if node.nil?
-        raise LineParseError, "parsing failed on line #{@line_no}"
+        raise LineParseError, "parsing failed on line #{@line_no}, because: \"#{@line_parser.failure_reason}\""
       else
         if node.is_a?(ExportNode)
           node.evaluate(@env,@exports)
