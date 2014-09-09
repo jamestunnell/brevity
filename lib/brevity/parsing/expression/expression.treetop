@@ -1,0 +1,42 @@
+module Brevity
+
+grammar Expression
+  include DynamicLevel
+  include DynamicChange
+  include Note
+  include Sequence
+  include Label
+  include DuplicateModifier
+  include TransposeModifier
+  include StretchModifier
+  
+  rule expression
+    start_dyn_change:(dynamic_change [\s]+)?
+    expr
+    more:([\s]+ dyn_change:(dynamic_change [\s]+)? expr)*
+    end_dyn_change:([\s]+ dynamic_change)?
+    <ExpressionNode>
+  end
+
+  rule expr
+    modified_expr / plain_expr
+  end
+  
+  rule plain_expr
+    group / label / sequence / note
+  end
+  
+  rule modified_expr
+    base:(group / label / note) modifiers:modifier+ <ModifiedNode>
+  end
+  
+  rule group
+    "(" [\s]* expression [\s]* ")" <GroupNode>
+  end
+  
+  rule modifier
+    transpose_modifier / duplicate_modifier / stretch_modifier
+  end
+end
+
+end

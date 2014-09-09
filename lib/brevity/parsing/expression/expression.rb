@@ -10,6 +10,12 @@ module Expression
     @root ||= :expression
   end
 
+  include DynamicLevel
+
+  include DynamicChange
+
+  include Note
+
   include Sequence
 
   include Label
@@ -21,18 +27,50 @@ module Expression
   include StretchModifier
 
   module Expression0
-    def expression
+    def dynamic_change
+      elements[0]
+    end
+
+  end
+
+  module Expression1
+    def dynamic_change
+      elements[0]
+    end
+
+  end
+
+  module Expression2
+    def dyn_change
+      elements[1]
+    end
+
+    def expr
+      elements[2]
+    end
+  end
+
+  module Expression3
+    def dynamic_change
       elements[1]
     end
   end
 
-  module Expression1
-    def single
+  module Expression4
+    def start_dyn_change
       elements[0]
     end
 
-    def more
+    def expr
       elements[1]
+    end
+
+    def more
+      elements[2]
+    end
+
+    def end_dyn_change
+      elements[3]
     end
   end
 
@@ -48,57 +86,183 @@ module Expression
     end
 
     i0, s0 = index, []
-    r1 = _nt_single
-    s0 << r1
-    if r1
-      s2, i2 = [], index
+    i2, s2 = index, []
+    r3 = _nt_dynamic_change
+    s2 << r3
+    if r3
+      s4, i4 = [], index
       loop do
-        i3, s3 = index, []
-        s4, i4 = [], index
-        loop do
-          if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
-            r5 = true
-            @index += 1
-          else
-            terminal_parse_failure('[\\s]')
-            r5 = nil
-          end
-          if r5
-            s4 << r5
-          else
-            break
-          end
-        end
-        if s4.empty?
-          @index = i4
-          r4 = nil
+        if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+          r5 = true
+          @index += 1
         else
-          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+          terminal_parse_failure('[\\s]')
+          r5 = nil
         end
-        s3 << r4
-        if r4
-          r6 = _nt_expression
-          s3 << r6
-        end
-        if s3.last
-          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-          r3.extend(Expression0)
-        else
-          @index = i3
-          r3 = nil
-        end
-        if r3
-          s2 << r3
+        if r5
+          s4 << r5
         else
           break
         end
       end
+      if s4.empty?
+        @index = i4
+        r4 = nil
+      else
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+      end
+      s2 << r4
+    end
+    if s2.last
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
-      s0 << r2
+      r2.extend(Expression0)
+    else
+      @index = i2
+      r2 = nil
+    end
+    if r2
+      r1 = r2
+    else
+      r1 = instantiate_node(SyntaxNode,input, index...index)
+    end
+    s0 << r1
+    if r1
+      r6 = _nt_expr
+      s0 << r6
+      if r6
+        s7, i7 = [], index
+        loop do
+          i8, s8 = index, []
+          s9, i9 = [], index
+          loop do
+            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+              r10 = true
+              @index += 1
+            else
+              terminal_parse_failure('[\\s]')
+              r10 = nil
+            end
+            if r10
+              s9 << r10
+            else
+              break
+            end
+          end
+          if s9.empty?
+            @index = i9
+            r9 = nil
+          else
+            r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+          end
+          s8 << r9
+          if r9
+            i12, s12 = index, []
+            r13 = _nt_dynamic_change
+            s12 << r13
+            if r13
+              s14, i14 = [], index
+              loop do
+                if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+                  r15 = true
+                  @index += 1
+                else
+                  terminal_parse_failure('[\\s]')
+                  r15 = nil
+                end
+                if r15
+                  s14 << r15
+                else
+                  break
+                end
+              end
+              if s14.empty?
+                @index = i14
+                r14 = nil
+              else
+                r14 = instantiate_node(SyntaxNode,input, i14...index, s14)
+              end
+              s12 << r14
+            end
+            if s12.last
+              r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
+              r12.extend(Expression1)
+            else
+              @index = i12
+              r12 = nil
+            end
+            if r12
+              r11 = r12
+            else
+              r11 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s8 << r11
+            if r11
+              r16 = _nt_expr
+              s8 << r16
+            end
+          end
+          if s8.last
+            r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+            r8.extend(Expression2)
+          else
+            @index = i8
+            r8 = nil
+          end
+          if r8
+            s7 << r8
+          else
+            break
+          end
+        end
+        r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+        s0 << r7
+        if r7
+          i18, s18 = index, []
+          s19, i19 = [], index
+          loop do
+            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+              r20 = true
+              @index += 1
+            else
+              terminal_parse_failure('[\\s]')
+              r20 = nil
+            end
+            if r20
+              s19 << r20
+            else
+              break
+            end
+          end
+          if s19.empty?
+            @index = i19
+            r19 = nil
+          else
+            r19 = instantiate_node(SyntaxNode,input, i19...index, s19)
+          end
+          s18 << r19
+          if r19
+            r21 = _nt_dynamic_change
+            s18 << r21
+          end
+          if s18.last
+            r18 = instantiate_node(SyntaxNode,input, i18...index, s18)
+            r18.extend(Expression3)
+          else
+            @index = i18
+            r18 = nil
+          end
+          if r18
+            r17 = r18
+          else
+            r17 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r17
+        end
+      end
     end
     if s0.last
       r0 = instantiate_node(ExpressionNode,input, i0...index, s0)
-      r0.extend(Expression1)
+      r0.extend(Expression4)
     else
       @index = i0
       r0 = nil
@@ -109,12 +273,12 @@ module Expression
     r0
   end
 
-  def _nt_single
+  def _nt_expr
     start_index = index
-    if node_cache[:single].has_key?(index)
-      cached = node_cache[:single][index]
+    if node_cache[:expr].has_key?(index)
+      cached = node_cache[:expr][index]
       if cached
-        node_cache[:single][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:expr][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -136,7 +300,7 @@ module Expression
       end
     end
 
-    node_cache[:single][start_index] = r0
+    node_cache[:expr][start_index] = r0
 
     r0
   end
@@ -153,12 +317,12 @@ module Expression
     end
 
     i0 = index
-    r1 = _nt_grouped_expr
+    r1 = _nt_group
     if r1
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      r2 = _nt_label_expr
+      r2 = _nt_label
       if r2
         r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
@@ -168,8 +332,14 @@ module Expression
           r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
-          @index = i0
-          r0 = nil
+          r4 = _nt_note
+          if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
+            r0 = r4
+          else
+            @index = i0
+            r0 = nil
+          end
         end
       end
     end
@@ -202,41 +372,47 @@ module Expression
 
     i0, s0 = index, []
     i1 = index
-    r2 = _nt_grouped_expr
+    r2 = _nt_group
     if r2
       r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
       r1 = r2
     else
-      r3 = _nt_label_expr
+      r3 = _nt_label
       if r3
         r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
         r1 = r3
       else
-        @index = i1
-        r1 = nil
+        r4 = _nt_note
+        if r4
+          r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
+          r1 = r4
+        else
+          @index = i1
+          r1 = nil
+        end
       end
     end
     s0 << r1
     if r1
-      s4, i4 = [], index
+      s5, i5 = [], index
       loop do
-        r5 = _nt_modifier
-        if r5
-          s4 << r5
+        r6 = _nt_modifier
+        if r6
+          s5 << r6
         else
           break
         end
       end
-      if s4.empty?
-        @index = i4
-        r4 = nil
+      if s5.empty?
+        @index = i5
+        r5 = nil
       else
-        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
       end
-      s0 << r4
+      s0 << r5
     end
     if s0.last
-      r0 = instantiate_node(ModifiedExprNode,input, i0...index, s0)
+      r0 = instantiate_node(ModifiedNode,input, i0...index, s0)
       r0.extend(ModifiedExpr0)
     else
       @index = i0
@@ -248,19 +424,19 @@ module Expression
     r0
   end
 
-  module GroupedExpr0
+  module Group0
     def expression
       elements[2]
     end
 
   end
 
-  def _nt_grouped_expr
+  def _nt_group
     start_index = index
-    if node_cache[:grouped_expr].has_key?(index)
-      cached = node_cache[:grouped_expr][index]
+    if node_cache[:group].has_key?(index)
+      cached = node_cache[:group][index]
       if cached
-        node_cache[:grouped_expr][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:group][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -328,57 +504,14 @@ module Expression
       end
     end
     if s0.last
-      r0 = instantiate_node(GroupedExprNode,input, i0...index, s0)
-      r0.extend(GroupedExpr0)
+      r0 = instantiate_node(GroupNode,input, i0...index, s0)
+      r0.extend(Group0)
     else
       @index = i0
       r0 = nil
     end
 
-    node_cache[:grouped_expr][start_index] = r0
-
-    r0
-  end
-
-  module LabelExpr0
-    def label
-      elements[1]
-    end
-  end
-
-  def _nt_label_expr
-    start_index = index
-    if node_cache[:label_expr].has_key?(index)
-      cached = node_cache[:label_expr][index]
-      if cached
-        node_cache[:label_expr][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-
-    i0, s0 = index, []
-    if (match_len = has_terminal?(":", false, index))
-      r1 = true
-      @index += match_len
-    else
-      terminal_parse_failure(":")
-      r1 = nil
-    end
-    s0 << r1
-    if r1
-      r2 = _nt_label
-      s0 << r2
-    end
-    if s0.last
-      r0 = instantiate_node(LabelExprNode,input, i0...index, s0)
-      r0.extend(LabelExpr0)
-    else
-      @index = i0
-      r0 = nil
-    end
-
-    node_cache[:label_expr][start_index] = r0
+    node_cache[:group][start_index] = r0
 
     r0
   end

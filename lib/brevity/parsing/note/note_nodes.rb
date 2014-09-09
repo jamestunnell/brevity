@@ -18,14 +18,19 @@ class String
 end
 
 module Brevity
+  class NoteNode < Treetop::Runtime::SyntaxNode
+    def itemize(env)
+      Itemization.new(notes: [self.to_note])
+    end
+  end
   
-  class RestNoteNode < Treetop::Runtime::SyntaxNode
+  class RestNoteNode < NoteNode
     def to_note    
       Music::Transcription::Note.new(duration.to_r)
     end
   end
 
-  class MonophonicNoteNode < Treetop::Runtime::SyntaxNode
+  class MonophonicNoteNode < NoteNode
     def to_note
       pitches = [ pl.pitch.to_pitch ]
       links = {}
@@ -42,7 +47,7 @@ module Brevity
     end
   end
 
-  class PolyphonicNoteNode < Treetop::Runtime::SyntaxNode
+  class PolyphonicNoteNode < NoteNode
     def to_note
       pitches = [ pl.pitch.to_pitch ]
       links = {}

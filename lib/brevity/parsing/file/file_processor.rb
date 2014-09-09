@@ -5,7 +5,7 @@ module Brevity
     attr_reader :exports
     
     def initialize
-      @parts = {}
+      @env = {}
       @exports = {}
       @line_parser = LineParser.new
       @line_no = 0
@@ -29,15 +29,32 @@ module Brevity
         raise LineParseError, "parsing failed on line #{@line_no}"
       else
         if node.is_a?(ExportNode)
-          node.evaluate(@parts,@exports)
+          node.evaluate(@env,@exports)
         elsif node.is_a?(PartNode)
-          node.evaluate(@parts)
+          node.evaluate(@env)
         end
       end
     end
     
-    def make_score
-      Music::Transcription::Score.new(parts: @exports)
+    def make_score(default_tempo:, default_dynamic:)
+      parts = {}
+      tcs = {}
+      
+      @exports.each do |key,itemization|
+        dcs = itemization.dynamic_changes
+        sd = dcs.has_key?(0) ? dcs[0].value : default_dynamic
+        parts[key] = Part.new(
+          notes: itemization.notes,
+          dynamic_profile: Profile.new(sd, dcs)
+        )
+        tcs.merge!(itemization.tempo_changes)
+      end
+      
+      st = tcs.has_key?(0) ? dcs[0].value : default_tempo
+      Music::Transcription::Score.new(
+        parts: @exports[:parts],
+        tempo_profile: Profile.new(st,tcs)
+      )
     end
   end
 end

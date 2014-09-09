@@ -1,0 +1,11 @@
+module Brevity
+
+grammar Sequence
+  include Note
+  
+  rule sequence
+    first:note more:([\s]+ note)+ <SequenceNode>
+  end
+end
+
+end

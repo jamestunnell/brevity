@@ -1,13 +1,12 @@
 module Brevity
   class PartNode < Treetop::Runtime::SyntaxNode
-    def evaluate(parts)
+    def evaluate(env)
       key = label.to_key
-      if parts.has_key? key
-        part = parts[key]
-        start_dynamic = part.dynamic_profile.last_value
-        part.append!(expression.to_part(parts,start_dynamic))
+      if env.has_key? key
+        itemization = env[key]
+        itemization.append!(expression.itemize(env))
       else
-        parts[key] = expression.to_part(parts)
+        env[key] = expression.itemize(env)
       end
     end
   end

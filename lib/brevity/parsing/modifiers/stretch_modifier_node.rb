@@ -1,12 +1,12 @@
 module Brevity  
   class StretchModifierNode < Treetop::Runtime::SyntaxNode
-    def process part
+    def process itemization
       if op.text_value == "*"
         ratio = duration.to_r
       else
-        ratio = duration.to_r / part.duration
+        ratio = duration.to_r / itemization.duration
       end
-      part.stretch ratio
+      itemization.stretch ratio
     end
   end
 end

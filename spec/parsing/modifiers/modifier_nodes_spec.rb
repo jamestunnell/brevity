@@ -7,25 +7,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
   modparser, nodeclass = classes
 
   describe nodeclass do
-    SEQUENCES.each do |seqstr,src_part|
-      MODIFIERS[modtype].each do |modstr,modlambda|
-        tgt_part = modlambda.call(src_part)
-        modnode = modparser.parse(modstr)
-        
-        it "should parse a #{nodeclass}" do
-          modnode.should be_a nodeclass
+    describe '#process' do
+      it 'should produce a modified Itemization, according to str' do
+        SEQUENCES.each do |seqstr,notes|
+          MODIFIERS[modtype].each do |modstr,modlambda|
+            src = Itemization.new(notes:notes)
+            tgt = modlambda.call(src)
+            
+            modnode = modparser.parse(modstr)
+            res = modnode.process src
+            res.should be_a Itemization
+            res.should eq tgt
+          end
         end
-        
-        describe '#process' do
-          res_part = modnode.process src_part
-          it 'should produce a Part' do
-            res_part.should be_a Part
-          end
-          
-          it 'should produce modified part, matching target str' do
-            res_part.should eq tgt_part
-          end
-        end      
       end
     end
   end
