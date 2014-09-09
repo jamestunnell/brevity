@@ -43,17 +43,17 @@ module Brevity
       @exports.each do |key,itemization|
         dcs = itemization.dynamic_changes
         sd = dcs.has_key?(0) ? dcs[0].value : default_dynamic
-        parts[key] = Part.new(
+        parts[key] = Music::Transcription::Part.new(
           notes: itemization.notes,
-          dynamic_profile: Profile.new(sd, dcs)
+          dynamic_profile: Music::Transcription::Profile.new(sd, dcs)
         )
         tcs.merge!(itemization.tempo_changes)
       end
       
       st = tcs.has_key?(0) ? dcs[0].value : default_tempo
       Music::Transcription::Score.new(
-        parts: @exports[:parts],
-        tempo_profile: Profile.new(st,tcs)
+        parts: parts,
+        tempo_profile: Music::Transcription::Profile.new(st,tcs)
       )
     end
   end
