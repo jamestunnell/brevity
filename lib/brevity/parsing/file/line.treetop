@@ -1,11 +1,12 @@
 module Brevity
 
 grammar Line
+  include Comment
   include Part
   include Export
   
   rule line
-    export / part
+    comment / export / part
   end
 end
 

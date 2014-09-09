@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Comment
+  rule comment
+    "#" .* <CommentNode>
+  end
+end
+
+end

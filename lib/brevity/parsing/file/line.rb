@@ -10,6 +10,8 @@ module Line
     @root ||= :line
   end
 
+  include Comment
+
   include Part
 
   include Export
@@ -26,18 +28,24 @@ module Line
     end
 
     i0 = index
-    r1 = _nt_export
+    r1 = _nt_comment
     if r1
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      r2 = _nt_part
+      r2 = _nt_export
       if r2
         r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
-        @index = i0
-        r0 = nil
+        r3 = _nt_part
+        if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
+          r0 = r3
+        else
+          @index = i0
+          r0 = nil
+        end
       end
     end
 

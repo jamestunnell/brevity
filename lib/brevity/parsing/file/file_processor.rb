@@ -26,14 +26,15 @@ module Brevity
       end
       
       node = @line_parser.parse(stripped)
-      if node.nil?
+      case node
+      when NilClass
         raise LineParseError, "parsing failed on line #{@line_no}, because: \"#{@line_parser.failure_reason}\""
-      else
-        if node.is_a?(ExportNode)
-          node.evaluate(@env,@exports)
-        elsif node.is_a?(PartNode)
-          node.evaluate(@env)
-        end
+      when ExportNode
+        node.evaluate(@env,@exports)
+      when PartNode
+        node.evaluate(@env)
+      when CommentNode
+        # Do nothing
       end
     end
     
