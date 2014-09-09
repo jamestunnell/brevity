@@ -1,0 +1,13 @@
+module Brevity
+
+grammar Modifier
+  include DuplicateModifier
+  include TransposeModifier
+  include StretchModifier
+    
+  rule modifier
+    transpose_modifier / duplicate_modifier / stretch_modifier
+  end
+end
+
+end
