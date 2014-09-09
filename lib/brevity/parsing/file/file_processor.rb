@@ -20,11 +20,12 @@ module Brevity
     def process_line line
       @line_no += 1
       
-      if line.empty?
+      stripped = line.strip
+      if stripped.empty?
         return
       end
       
-      node = @line_parser.parse(line.strip)
+      node = @line_parser.parse(stripped)
       if node.nil?
         raise LineParseError, "parsing failed on line #{@line_no}, because: \"#{@line_parser.failure_reason}\""
       else
