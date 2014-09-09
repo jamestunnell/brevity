@@ -2,17 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe SequenceParser do
   describe '#parse' do
-    SEQUENCES.keys.each do |str|
-      before :all do
-        @res = SEQ_PARSER.parse(str)
+    it "should parts as SequenceNode" do
+      SEQUENCES.keys.each do |str|
+        SEQ_PARSER.should parse_as(str,SequenceNode)
       end
-      
-      it "should parse #{str}" do
-        @res.should_not be nil
-      end
-      
-      it "should parse #{str} as SequenceNode" do
-        @res.should be_a SequenceNode
+    end
+    
+    context 'last note is followed by a modifier' do
+      it 'should not parse' do
+        SEQ_PARSER.should_not parse("/2C2 /2C2:2")
       end
     end
   end

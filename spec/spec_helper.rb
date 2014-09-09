@@ -26,10 +26,10 @@ NOTES = {
   '1Eb3' => Note::Whole.new([Eb3]),
 }
 sequences = {}
-[1,2,3].each do |n|
+[2,3].each do |n|
   NOTES.entries.permutation(n).each do |perm|
     strs, notes = perm.transpose
-    sequences[strs.join(" ")] = notes
+    sequences[strs.join(" ")] = Itemization.new(notes:notes)
   end
 end
 SEQUENCES = sequences

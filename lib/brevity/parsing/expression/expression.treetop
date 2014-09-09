@@ -6,9 +6,7 @@ grammar Expression
   include Note
   include Sequence
   include Label
-  include DuplicateModifier
-  include TransposeModifier
-  include StretchModifier
+  include Modifier
   
   rule expression
     start_dyn_change:(dynamic_change [\s]+)?
@@ -32,10 +30,6 @@ grammar Expression
   
   rule group
     "(" [\s]* expression [\s]* ")" <GroupNode>
-  end
-  
-  rule modifier
-    transpose_modifier / duplicate_modifier / stretch_modifier
   end
 end
 

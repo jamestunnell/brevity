@@ -7,7 +7,7 @@ describe ExpressionNode do
         str = SEQUENCES.keys.last
         node = EXPR_PARSER.parse(str)
         
-        tgt = Itemization.new(notes: SEQUENCES[str])
+        tgt = SEQUENCES[str]
         node.itemize({}).should eq tgt
       end
     end
@@ -15,7 +15,7 @@ describe ExpressionNode do
     context 'composed sequences' do
       it 'should combine them into a single part' do
         strA, strB = SEQUENCES.keys[-2..-1]
-        tgt = Itemization.new(notes: SEQUENCES[strA] + SEQUENCES[strB])
+        tgt = SEQUENCES[strA].append(SEQUENCES[strB].clone)
         str = strA + " (#{strB})"
         EXPR_PARSER.parse(str).itemize({}).should eq tgt
       end
@@ -24,12 +24,12 @@ describe ExpressionNode do
     context 'chained modifications' do
       it 'should produce a single part, applying all modifications in sequence' do
         str = SEQUENCES.keys.last
-        notes = SEQUENCES[str]
+        item = SEQUENCES[str]
         str = "(#{str})"
         MODIFIERS.each do |modtype,modcases|
           modstrs, modlambdas = modcases.entries.transpose
           modstr = modstrs.join
-          tgt = Itemization.new(notes: notes.map {|n| n.clone })
+          tgt = item.clone
           modlambdas.each {|l| tgt = l.call(tgt) }
           node = EXPR_PARSER.parse(str + modstr)
           node.itemize({}).should eq(tgt)
@@ -42,10 +42,10 @@ end
 describe GroupNode do
   describe '#itemize' do
     it 'should produce same part that is in parenthesis' do
-      SEQUENCES.each do |str,notes|
+      SEQUENCES.each do |str,tgt|
         node = EXPR_PARSER.parse("(#{str})")
         itemization = node.itemize({})
-        itemization.notes.should eq(notes)
+        itemization.should eq(tgt)
       end
     end
   end
@@ -54,16 +54,15 @@ end
 describe ModifiedNode do
   describe '#itemize' do
     it 'should produce a modified itemization' do
-      SEQUENCES.each do |seqstr,notes|
+      SEQUENCES.each do |seqstr,tgt|
         MODIFIERS.each do |modtype,modcases|
           modcases.each do |modstr,modlambda|
             str = "(#{seqstr})#{modstr}"
-            src = Itemization.new(notes:notes)
-            tgt = modlambda.call(src)
+            tgtmod = modlambda.call(tgt)
             
             node = EXPR_PARSER.parse str
             res = node.itemize({})
-            res.should eq tgt
+            res.should eq tgtmod
           end
         end
       end

@@ -12,10 +12,13 @@ module Sequence
 
   include Note
 
+  include Modifier
+
   module Sequence0
     def note
       elements[1]
     end
+
   end
 
   module Sequence1
@@ -71,6 +74,17 @@ module Sequence
         if r4
           r6 = _nt_note
           s3 << r6
+          if r6
+            i7 = index
+            r8 = _nt_modifier
+            if r8
+              r7 = nil
+            else
+              @index = i7
+              r7 = instantiate_node(SyntaxNode,input, index...index)
+            end
+            s3 << r7
+          end
         end
         if s3.last
           r3 = instantiate_node(SyntaxNode,input, i3...index, s3)

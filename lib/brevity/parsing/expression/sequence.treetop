@@ -2,9 +2,10 @@ module Brevity
 
 grammar Sequence
   include Note
+  include Modifier
   
   rule sequence
-    first:note more:([\s]+ note)+ <SequenceNode>
+    first:note more:([\s]+ note !modifier)+ <SequenceNode>
   end
 end
 

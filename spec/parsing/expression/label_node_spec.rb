@@ -5,7 +5,8 @@ describe LabelNode do
     it 'should fetch whatever is in given Hash' do
       LABELS.each do |str|
         node = LABEL_PARSER.parse(str)
-        node.itemize({ node.to_key => 1 }).should eq 1
+        tgt = Itemization.new(notes: [Note::Quarter.new])
+        node.itemize({ node.to_key => tgt }).should eq tgt
       end
     end    
   end

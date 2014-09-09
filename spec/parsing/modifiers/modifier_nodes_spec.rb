@@ -9,9 +9,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
   describe nodeclass do
     describe '#process' do
       it 'should produce a modified Itemization, according to str' do
-        SEQUENCES.each do |seqstr,notes|
+        SEQUENCES.each do |seqstr,src|
           MODIFIERS[modtype].each do |modstr,modlambda|
-            src = Itemization.new(notes:notes)
             tgt = modlambda.call(src)
             
             modnode = modparser.parse(modstr)

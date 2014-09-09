@@ -24,6 +24,7 @@ require 'brevity/parsing/modifiers/stretch_modifier'
 require 'brevity/parsing/modifiers/stretch_modifier_node'
 require 'brevity/parsing/modifiers/transpose_modifier'
 require 'brevity/parsing/modifiers/transpose_modifier_node'
+require 'brevity/parsing/modifiers/modifier'
 
 require 'brevity/parsing/expression/label'
 require 'brevity/parsing/expression/label_node'

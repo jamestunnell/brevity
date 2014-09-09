@@ -20,11 +20,7 @@ module Expression
 
   include Label
 
-  include DuplicateModifier
-
-  include TransposeModifier
-
-  include StretchModifier
+  include Modifier
 
   module Expression0
     def dynamic_change
@@ -512,44 +508,6 @@ module Expression
     end
 
     node_cache[:group][start_index] = r0
-
-    r0
-  end
-
-  def _nt_modifier
-    start_index = index
-    if node_cache[:modifier].has_key?(index)
-      cached = node_cache[:modifier][index]
-      if cached
-        node_cache[:modifier][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-
-    i0 = index
-    r1 = _nt_transpose_modifier
-    if r1
-      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
-      r0 = r1
-    else
-      r2 = _nt_duplicate_modifier
-      if r2
-        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
-        r0 = r2
-      else
-        r3 = _nt_stretch_modifier
-        if r3
-          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
-          r0 = r3
-        else
-          @index = i0
-          r0 = nil
-        end
-      end
-    end
-
-    node_cache[:modifier][start_index] = r0
 
     r0
   end
