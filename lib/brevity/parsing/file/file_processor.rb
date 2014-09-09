@@ -42,7 +42,13 @@ module Brevity
       
       @exports.each do |key,itemization|
         dcs = itemization.dynamic_changes
-        sd = dcs.has_key?(0) ? dcs[0].value : default_dynamic
+        minkey = dcs.keys.min
+        if minkey == 0
+          sd = dcs[minkey].value
+          dcs.delete minkey
+        else
+          sd = default_dynamic
+        end
         parts[key] = Music::Transcription::Part.new(
           notes: itemization.notes,
           dynamic_profile: Music::Transcription::Profile.new(sd, dcs)
@@ -50,7 +56,13 @@ module Brevity
         tcs.merge!(itemization.tempo_changes)
       end
       
-      st = tcs.has_key?(0) ? dcs[0].value : default_tempo
+      minkey = tcs.keys.min
+      if minkey == 0
+        st = tcs[minkey].value
+        tcs.delete minkey
+      else
+        st = default_tempo
+      end
       Music::Transcription::Score.new(
         parts: parts,
         tempo_profile: Music::Transcription::Profile.new(st,tcs)

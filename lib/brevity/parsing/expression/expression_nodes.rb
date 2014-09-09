@@ -11,7 +11,7 @@ module Brevity
       
       more.elements.each do |el|
         unless el.dyn_change.empty?
-          dc = { 0.0.to_r => el.dyn_change.dynamic_change.to_change }
+          dc = { 0.to_r => el.dyn_change.dynamic_change.to_change }
           itemization.append! Itemization.new(dynamic_changes: dc)
         end
         
@@ -20,7 +20,7 @@ module Brevity
       end
       
       unless end_dyn_change.empty?
-        dc = { 0.0.to_r => end_dyn_change.dynamic_change.to_change }
+        dc = { 0.to_r => end_dyn_change.dynamic_change.to_change }
         itemization.append!(Itemization.new(dynamic_changes: dc))
       end
       
