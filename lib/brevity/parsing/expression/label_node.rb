@@ -5,7 +5,7 @@ module Brevity
     end
     
     def itemize(env)
-      env.fetch(self.to_key)
+      env.fetch(self.to_key).clone
     end
   end
 end
