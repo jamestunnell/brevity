@@ -1,10 +1,10 @@
 module Brevity
 
 grammar TempoChange
-  include PositiveInteger
+  include Tempo
   
   rule tempo_change
-    mark:(("<" / ">") [\s]*)? tempo:positive_integer <TempoChangeNode>
+    mark:(("<" / ">") [\s]*)? tempo <TempoChangeNode>
   end
 end
 

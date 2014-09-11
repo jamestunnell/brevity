@@ -10,7 +10,7 @@ module TempoChange
     @root ||= :tempo_change
   end
 
-  include PositiveInteger
+  include Tempo
 
   module TempoChange0
   end
@@ -99,7 +99,7 @@ module TempoChange
     end
     s0 << r1
     if r1
-      r8 = _nt_positive_integer
+      r8 = _nt_tempo
       s0 << r8
     end
     if s0.last

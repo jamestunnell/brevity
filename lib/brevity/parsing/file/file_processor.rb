@@ -39,6 +39,14 @@ module Brevity
     end
     
     def make_score(default_tempo:, default_dynamic:)
+      unless default_tempo.is_a? Music::Transcription::Tempo
+        raise ArgumentError, "default tempo #{default_tempo} is not a Tempo"
+      end
+      
+      unless default_dynamic.is_a? Music::Transcription::Dynamic
+        raise ArgumentError, "default dynamic #{default_dynamic} is not a Dynamic"
+      end
+      
       parts = {}
       tcs = {}
       
@@ -65,6 +73,20 @@ module Brevity
       else
         st = default_tempo
       end
+      
+      # now that start tempo is established, find tempo changes
+      # whose value is not a Tempo object and convert them
+      prev_tempo = st
+      tcs.keys.sort.each do |offset|
+        tc = tcs[offset]
+        tempo = tc.value
+        if tempo.beat_duration.nil?
+          tc.value = Music::Transcription::Tempo.new(
+            tempo.beats_per_minute,prev_tempo.beat_duration)
+        end
+        prev_tempo = tc.value
+      end
+      
       Music::Transcription::Score.new(
         parts: parts,
         tempo_profile: Music::Transcription::Profile.new(st,tcs)

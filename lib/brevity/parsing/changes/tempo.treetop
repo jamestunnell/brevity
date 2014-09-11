@@ -1,0 +1,12 @@
+module Brevity
+
+grammar Tempo
+  include PositiveInteger
+  include Duration
+  
+  rule tempo
+    bpm:positive_integer more:("," beat_dur:duration)? <TempoNode>
+  end
+end
+
+end
