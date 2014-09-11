@@ -31,29 +31,3 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
     end
   end
 end
-
-{
-  ImmediateDynamicChangeNode => ["pp",Change::Immediate.new(Dynamic::Pianissimo.new)],
-  GradualDynamicChangeNode => [">pp",Change::Gradual.new(Dynamic::Pianissimo.new)],
-}.each do |nodeclass, str_tgt|
-  describe nodeclass do
-    str,tgt = str_tgt
-    parser = DynamicChangeParser.new
-    res = parser.parse(str)
-    
-    it "should parse as #{nodeclass}" do
-      res.should be_a nodeclass
-    end
-    
-    describe '#to_change' do
-      c = res.to_change
-      it 'should produce a Change' do
-        c.should be_a Change
-      end
-      
-      it 'should produce a value matching input str' do
-        c.should eq tgt
-      end
-    end
-  end
-end

@@ -1,16 +1,4 @@
 module Brevity
-  class ImmediateDynamicChangeNode < Treetop::Runtime::SyntaxNode
-    def to_change
-      Music::Transcription::Change::Immediate.new(dl.to_dynamic)
-    end
-  end
-
-  class GradualDynamicChangeNode < Treetop::Runtime::SyntaxNode
-    def to_change
-      Music::Transcription::Change::Gradual.new(dl.to_dynamic)
-    end
-  end
-  
   class PianississimoNode < Treetop::Runtime::SyntaxNode
     def to_dynamic
       Music::Transcription::Dynamic::Pianississimo.new

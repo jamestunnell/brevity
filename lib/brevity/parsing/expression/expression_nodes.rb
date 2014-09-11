@@ -1,27 +1,24 @@
 module Brevity
   class ExpressionNode < Treetop::Runtime::SyntaxNode
     def itemize(env)
-      if start_dyn_change.empty?
+      if pre.empty?
         itemization = expr.itemize(env)
       else
-        dc = { 0.to_r => start_dyn_change.dynamic_change.to_change }
-        itemization = Itemization.new(dynamic_changes: dc)
+        itemization = pre.changes.to_itemization
         itemization.append!(expr.itemize(env))
       end
       
       more.elements.each do |el|
-        unless el.dyn_change.empty?
-          dc = { 0.to_r => el.dyn_change.dynamic_change.to_change }
-          itemization.append! Itemization.new(dynamic_changes: dc)
+        unless el.pre.empty?
+          itemization.append! el.pre.changes.to_itemization
         end
         
         item2 = el.expr.itemize(env)
         itemization.append! item2
       end
       
-      unless end_dyn_change.empty?
-        dc = { 0.to_r => end_dyn_change.dynamic_change.to_change }
-        itemization.append!(Itemization.new(dynamic_changes: dc))
+      unless post.empty?
+        itemization.append! post.changes.to_itemization
       end
       
       return itemization

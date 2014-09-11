@@ -1,0 +1,11 @@
+module Brevity
+
+grammar TempoChange
+  include PositiveInteger
+  
+  rule tempo_change
+    mark:(("<" / ">") [\s]*)? tempo:positive_integer <TempoChangeNode>
+  end
+end
+
+end

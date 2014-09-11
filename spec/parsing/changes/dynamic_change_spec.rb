@@ -8,7 +8,7 @@ describe DynamicChangeParser do
   context 'gradual dynamic change' do
     it 'should parse' do
       [">ppp","<ff",">mp"].each do |str|
-        @parser.parse(str).should_not be nil
+        @parser.should parse(str)
       end
     end
   end
@@ -16,7 +16,7 @@ describe DynamicChangeParser do
   context 'immediate dynamic change' do
     it 'should parse' do
       ["ppp","ff","mp"].each do |str|
-        @parser.parse(str).should_not be nil
+        @parser.should parse(str)
       end
     end
   end

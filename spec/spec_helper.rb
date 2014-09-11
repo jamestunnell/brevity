@@ -68,3 +68,4 @@ STRING_PARSER = StringParser.new
 LABEL_PARSER = LabelParser.new
 COMMENT_PARSER = CommentParser.new
 LINE_PARSER = LineParser.new
+CHANGES_PARSER = ChangesParser.new

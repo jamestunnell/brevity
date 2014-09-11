@@ -1,19 +1,26 @@
 module Brevity
 
 grammar Expression
-  include DynamicLevel
-  include DynamicChange
+  include Changes
   include Note
   include Sequence
   include Label
   include Modifier
   
   rule expression
-    start_dyn_change:(dynamic_change [\s]+)?
+    pre:pre_changes?
     expr
-    more:([\s]+ dyn_change:(dynamic_change [\s]+)? expr)*
-    end_dyn_change:([\s]+ dynamic_change)?
+    more:([\s]+ pre:pre_changes? expr)*
+    post:post_changes?
     <ExpressionNode>
+  end
+  
+  rule post_changes
+    [\s]+ changes
+  end
+  
+  rule pre_changes
+    changes [\s]+
   end
 
   rule expr

@@ -1,0 +1,11 @@
+module Brevity
+
+grammar DynamicChange
+  include DynamicLevel
+  
+  rule dynamic_change
+    mark:(("<" / ">") [\s]*)? dynamic_level <DynamicChangeNode>
+  end
+end
+
+end
