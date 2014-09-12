@@ -54,3 +54,6 @@ require 'brevity/parsing/file/comment'
 require 'brevity/parsing/file/comment_node'
 require 'brevity/parsing/file/line'
 require 'brevity/parsing/file/file_processor'
+
+require 'brevity/parsing/command'
+require 'brevity/parsing/command_node'

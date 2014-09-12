@@ -12,7 +12,7 @@ A Compact Music Notation Format
 \maketitle
 
 \begin{abstract}
-In a computer, music notation is usually represented by some file format. Music notation formats are often awkward or impossible to work with directly, and require a visualization layer that does not resemble the underlying representation. A simple file format for representation is presented that is straight-forward to both read and modify directly.
+In a computer, music notation is usually represented by some file format. Music notation formats are often awkward or impossible to work with directly, and require a visualization layer that does not resemble the underlying representation. Brevity is a simple file format that is straight-forward to both read and modify directly.
 \end{abstract}
 
 \tableofcontents
@@ -114,36 +114,36 @@ Table~\ref{tab:link_markers} lists the supported link types and the characters u
 
 \section{Sequences}
 A sequence is a series of notes/rests. A sequence is declared by placing notes/rests together and separating by spaces, as in 
-\begin{center}
-\verb|/4D6 /4A5 /16Ab6 3/16Bb6=Bb6 /4Bb6|
-\end{center}
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|/4D6 /4A5 /16Ab6 3/16Bb6=Bb6 /4Bb6|
+\end{tabbing}
 
 A sequence can either be labeled for later reused, or modified to produce a new sequence.
 
 \subsection{Labeling Sequences}
-Sequences are assigned to a label by following the label with \verb|:=| and then a sequence, as in
-\begin{center}
-\verb|my_label:= /8C5 /8D5 /8E5 /8D5 /2C5|
-\end{center}
+Sequences are assigned to a label using a \verb|\beginsequence| statement, followed by a a note sequence, as in
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|\seq{my_label}{/8C5 /8D5 /8E5 /8D5 /2C5}|
+\end{tabbing}
 
 Once labeled, the label can be used in place of the sequence. 
 
 \subsubsection{Continuing Labeled Sequences}
 A labeled sequence can be continued later, which will add more notes onto the end of the sequence. This might also be called concatenation.
 
-A labeled sequence is continued by following the label with \verb|:+| and then a sequence, as in
+A labeled sequence is continued using a \verb|\seq| statement, as in
 \begin{tabbing}
-  \hspace{1in}\= \verb| bass:= /8C4 /8C4 /8C4 /8C4| \\
-  \> \verb| bass:+ /8E4 /8E4 /8E4 /8E4|
+  \hspace{0.5in}\= \verb|\seq{bass}{ /8C4 /8C4 /8C4 /8C4 }| \\
+  \> \verb|\seq{bass}{ /8E4 /8E4 /8E4 /8E4 }|
 \end{tabbing}
 
 This allows a sequence to span over multiple lines by starting each line with the same label. But continuing lines do not have to be consecutive, as long as the same label is used for each continuing line. So, multiple parts can be interleaved as follows:
 \begin{tabbing}
-  \hspace{1in}\= \verb| bass:= /4C4 /4C4 /4C4 /4C4| \\
-  \> \verb| lead:=  /2E6 /2E6| \\
+  \hspace{1in}\= \verb| \seq{bass}{ /4C4 /4C4 /4C4 /4C4 }| \\
+  \> \verb| \seq{lead}{ /2E6 /2E6 }| \\
   \> ~\\
-  \> \verb| bass:+ /4E4 /4E4 /4E4 /4E4| \\
-  \> \verb| lead:+  /2G6 /2G6| \\
+  \> \verb| \seq{bass}{ /4E4 /4E4 /4E4 /4E4 }| \\
+  \> \verb| \seq{lead}{ /2G6 /2G6 }| \\
 \end{tabbing}
 
 \subsection{Modifying Sequences}
@@ -213,8 +213,8 @@ For example,
 
 Of course, labels can be used in places of sequences, as in
 \begin{tabbing}
-  \hspace{1in}\= \verb|seq1:= /4F4 /4G4| \\
-  \> \verb|seq2:= seq1:2 seq1+2|
+  \hspace{1in}\= \verb|\seq{seq1}{ /4F4 /4G4 }| \\
+  \> \verb|\seq{seq2}{ seq1:2 seq1+2 }|
 \end{tabbing}
 
 \subsubsection{Chaining Modifications}
@@ -232,15 +232,39 @@ To immediately change dynamic level, simply place a dynamic marker by itself bef
 \end{center}
 
 \subsection{Gradual Changes}
-Dynamic level can be gradually changed over time with a crescendo or decrescendo, the start of which is marked by a \verb|<| or \verb|>|, respectively. The end of a crescendo or decrescendo is marked by the target dynamic level. For example, \verb|> ... p| marks a decrescendo from the current dynamic level down to piano over the course of whatver note/rests come between. Here is an example of a gradual dynamic change:
+Dynamic level can be gradually changed over time with a crescendo or decrescendo. By preceding the dynamic level with a \verb|<| or \verb|>|, change will be marked as a gradual change from whatever the previous dynamic level was. Here is an example of a gradual dynamic change:
 \begin{center}
-\verb| p< /8C6 /8C6 /4F6 f /8D6 /8D6 /4G6 |
+\verb| p /8C6 /8C6 /4F6 <f /8D6 /8D6 /4G6 |
 \end{center}
 
-\section{Parts}
-Of course, a musical score wouldn't be complete without parts. If you've understood note sequences, then the good news is that a part is a note sequence! However, in the end, the final score needs have a name associated with each part. This is accomplished with a syntax like an associative array (hash table), as follows:
-\begin{center}
-\verb|{"Bass": bass, "Lead Guitar":lead, "Rhythm Guitar":rhythm}|
-\end{center}
+\section{Scores}
+The final goal of the music notation file is to compose a score, which has one or more parts. All of the parts declared anywhere in the file will be added to the score. Besides at least one part, the only other information that is required is a starting tempo. The following subsections cover parts and starting tempo.
+
+\subsection{Parts}
+A \verb|\part| statement associates a name with a note sequence. The note sequence must begin with a starting dynamic level. Like the sequence statement, all the lines following a part statement will be included until the next statement is reached. 
+
+Here is an example of the syntax:
+
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|\part{Lead Guitar}{mf /8D5 /8Eb5 /4F5 3/4C5}|
+\end{tabbing}
+
+Notice in the example there is a starting dynamic level, mezzo forte, just before the note sequence. Here is another example, this time using labeled sequence:
+
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|\part{Piano}{pp sectA sectB:2 sectA}| \\
+\end{tabbing}
+
+Parts can be declared anywhere in the file, and they will be added to the score.
+
+\subsection{Starting Tempo}
+A starting tempo is defined by a \verb|\starttempo| statement, which can be placed anywhere in the file. The tempo given must inculde the beat duration. Here is an example, with a tempo of 120 bpm and a quarter note beat duration:
+
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|\starttempo{120,/4}|
+\end{tabbing}
+
+\section{Comments}
+Any line starting with a number sign `\verb|#|' will be considered a comment and ignored.
 
 \end{document}

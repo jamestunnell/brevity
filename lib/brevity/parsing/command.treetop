@@ -1,0 +1,17 @@
+module Brevity
+
+grammar Command
+  rule command
+    "\\" cmd_name braced_args:braced_arg* <CommandNode>
+  end
+  
+  rule cmd_name
+    [a-z]+
+  end
+  
+  rule braced_arg
+    "{" text:(!"}" .)* "}"
+  end  
+end
+
+end

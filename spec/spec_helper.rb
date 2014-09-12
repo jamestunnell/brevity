@@ -69,3 +69,4 @@ LABEL_PARSER = LabelParser.new
 COMMENT_PARSER = CommentParser.new
 LINE_PARSER = LineParser.new
 CHANGES_PARSER = ChangesParser.new
+COMMAND_PARSER = CommandParser.new
