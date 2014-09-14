@@ -4,39 +4,67 @@ module Brevity
   class FileProcessor
     attr_reader :exports
     
-    def initialize
+    def initialize fname
+      @fname = fname
+      
       @env = {}
-      @exports = {}
+      @parts = {}
+      @comment_parser = CommentParser.new
       @line_parser = LineParser.new
       @line_no = 0
+      @start_tempo = nil
     end
     
-    def process_lines lines
-      lines.each do |line|
-        process_line line
+    def self.strip_lines lines
+      lines.map {|l| l.strip }
+    end
+    
+    def self.select_important_lines lines
+      lines.keep_if {|l| !l.empty? && @comment_parser.parse(l).nil? }
+    end
+    
+    def self.merge_lines lines
+      lines.join.gsub(/[\r\n]/," ")
+    end
+    
+    def process
+      File.open(@fname) do |f|
+        lines = f.readlines
+        lines = FileProcessor.strip_lines(lines)
+        lines = FileProcessor.select_important_lines(lines)
+        line = FileProcessor.merge_lines(lines)
+
+        nodes = []        
+        # TODO use superline
       end
     end
     
-    def process_line line
-      @line_no += 1
-      
-      stripped = line.strip
-      if stripped.empty?
-        return
-      end
-      
-      node = @line_parser.parse(stripped)
-      case node
-      when NilClass
-        raise LineParseError, "parsing failed on line #{@line_no}, because: \"#{@line_parser.failure_reason}\""
-      when ExportNode
-        node.evaluate(@env,@exports)
-      when PartNode
-        node.evaluate(@env)
-      when CommentNode
-        # Do nothing
-      end
-    end
+    #def process_lines lines
+    #  lines.each do |line|
+    #    process_line line
+    #  end
+    #end
+    #
+    #def process_line line
+    #  @line_no += 1
+    #  
+    #  stripped = line.strip
+    #  if stripped.empty?
+    #    return
+    #  end
+    #  
+    #  node = @line_parser.parse(stripped)
+    #  case node
+    #  when NilClass
+    #    raise LineParseError, "parsing failed on line #{@line_no}, because: \"#{@line_parser.failure_reason}\""
+    #  when ExportNode
+    #    node.evaluate(@env,@exports)
+    #  when PartNode
+    #    node.evaluate(@env)
+    #  when CommentNode
+    #    # Do nothing
+    #  end
+    #end
     
     def make_score(default_tempo:, default_dynamic:)
       unless default_tempo.is_a? Music::Transcription::Tempo
@@ -91,6 +119,34 @@ module Brevity
         parts: parts,
         tempo_profile: Music::Transcription::Profile.new(st,tcs)
       )
+    end
+  end
+  
+  class ExportNode < Treetop::Runtime::SyntaxNode
+    def evaluate(env,exports)
+      unless pairs.empty?
+        key = pairs.first.string.to_s
+        value = env.fetch(pairs.first.label.to_key)
+        exports[key] = value
+        
+        pairs.more.elements.each do |el|
+          key = el.pair.string.to_s
+          value = env.fetch(el.pair.label.to_key)
+          exports[key] = value
+        end
+      end
+    end
+  end
+
+  class PartNode < Treetop::Runtime::SyntaxNode
+    def evaluate(env)
+      key = label.to_key
+      if env.has_key? key
+        itemization = env[key]
+        itemization.append!(expression.itemize(env))
+      else
+        env[key] = expression.itemize(env)
+      end
     end
   end
 end

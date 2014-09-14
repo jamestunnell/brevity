@@ -59,14 +59,11 @@ MODIFIERS = {
 }
 
 SEQ_PARSER = SequenceParser.new
-PART_PARSER = PartParser.new
 EXPR_PARSER = ExpressionParser.new
 DUR_PARSER = DurationParser.new
 NOTE_PARSER = NoteParser.new
-EXPORT_PARSER = ExportParser.new
-STRING_PARSER = StringParser.new
 LABEL_PARSER = LabelParser.new
 COMMENT_PARSER = CommentParser.new
-LINE_PARSER = LineParser.new
 CHANGES_PARSER = ChangesParser.new
 COMMAND_PARSER = CommandParser.new
+FILE_PARSER = FileParser.new

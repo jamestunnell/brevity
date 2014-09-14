@@ -2,7 +2,19 @@ module Brevity
 
 grammar Comment
   rule comment
-    "#" .* <CommentNode>
+    "#" (!newline .)* <CommentNode>
+  end
+  
+  rule newline
+    windows_newline / unix_newline
+  end
+  
+  rule windows_newline
+    "\r\n"
+  end
+  
+  rule unix_newline
+    "\n"
   end
 end
 

@@ -13,5 +13,17 @@ describe SequenceParser do
         SEQ_PARSER.should_not parse("/2C2 /2C2:2")
       end
     end
+    
+    context 'separated by tabs' do
+      it 'should parse as SequenceNode' do
+        SEQ_PARSER.should parse_as("/2C2\t/4C2\t\t/4C2",SequenceNode)
+      end
+    end
+    
+    context 'separated by carriage return and/or newlines' do
+      it 'should parse as SequenceNode' do
+        SEQ_PARSER.should parse_as("/2C2\r/4C2\r\n/4C2\n/4C2",SequenceNode)
+      end
+    end
   end
 end

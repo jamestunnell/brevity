@@ -13,6 +13,9 @@ module Comment
   module Comment0
   end
 
+  module Comment1
+  end
+
   def _nt_comment
     start_index = index
     if node_cache[:comment].has_key?(index)
@@ -36,11 +39,31 @@ module Comment
     if r1
       s2, i2 = [], index
       loop do
-        if index < input_length
-          r3 = true
-          @index += 1
+        i3, s3 = index, []
+        i4 = index
+        r5 = _nt_newline
+        if r5
+          r4 = nil
         else
-          terminal_parse_failure("any character")
+          @index = i4
+          r4 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s3 << r4
+        if r4
+          if index < input_length
+            r6 = true
+            @index += 1
+          else
+            terminal_parse_failure("any character")
+            r6 = nil
+          end
+          s3 << r6
+        end
+        if s3.last
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          r3.extend(Comment0)
+        else
+          @index = i3
           r3 = nil
         end
         if r3
@@ -54,13 +77,93 @@ module Comment
     end
     if s0.last
       r0 = instantiate_node(CommentNode,input, i0...index, s0)
-      r0.extend(Comment0)
+      r0.extend(Comment1)
     else
       @index = i0
       r0 = nil
     end
 
     node_cache[:comment][start_index] = r0
+
+    r0
+  end
+
+  def _nt_newline
+    start_index = index
+    if node_cache[:newline].has_key?(index)
+      cached = node_cache[:newline][index]
+      if cached
+        node_cache[:newline][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0 = index
+    r1 = _nt_windows_newline
+    if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
+      r0 = r1
+    else
+      r2 = _nt_unix_newline
+      if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
+        r0 = r2
+      else
+        @index = i0
+        r0 = nil
+      end
+    end
+
+    node_cache[:newline][start_index] = r0
+
+    r0
+  end
+
+  def _nt_windows_newline
+    start_index = index
+    if node_cache[:windows_newline].has_key?(index)
+      cached = node_cache[:windows_newline][index]
+      if cached
+        node_cache[:windows_newline][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    if (match_len = has_terminal?("\r\n", false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+      @index += match_len
+    else
+      terminal_parse_failure("\r\n")
+      r0 = nil
+    end
+
+    node_cache[:windows_newline][start_index] = r0
+
+    r0
+  end
+
+  def _nt_unix_newline
+    start_index = index
+    if node_cache[:unix_newline].has_key?(index)
+      cached = node_cache[:unix_newline][index]
+      if cached
+        node_cache[:unix_newline][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    if (match_len = has_terminal?("\n", false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+      @index += match_len
+    else
+      terminal_parse_failure("\n")
+      r0 = nil
+    end
+
+    node_cache[:unix_newline][start_index] = r0
 
     r0
   end

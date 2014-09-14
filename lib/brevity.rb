@@ -1,9 +1,8 @@
-require 'brevity/version'
-
 require 'treetop'
 require 'music-transcription'
 
-require 'brevity/parsing/itemization'
+require 'brevity/version'
+require 'brevity/itemization'
 
 require 'brevity/parsing/numbers/nonnegative_integer'
 require 'brevity/parsing/numbers/positive_integer'
@@ -44,16 +43,9 @@ require 'brevity/parsing/expression/sequence_node'
 require 'brevity/parsing/expression/expression'
 require 'brevity/parsing/expression/expression_nodes'
 
-require 'brevity/parsing/file/part'
-require 'brevity/parsing/file/part_node'
-require 'brevity/parsing/file/string'
-require 'brevity/parsing/file/string_node'
-require 'brevity/parsing/file/export'
-require 'brevity/parsing/file/export_node'
 require 'brevity/parsing/file/comment'
 require 'brevity/parsing/file/comment_node'
-require 'brevity/parsing/file/line'
-require 'brevity/parsing/file/file_processor'
-
-require 'brevity/parsing/command'
-require 'brevity/parsing/command_node'
+require 'brevity/parsing/file/command'
+require 'brevity/parsing/file/command_node'
+require 'brevity/parsing/file/file'
+require 'brevity/parsing/file/file_node'

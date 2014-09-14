@@ -75,4 +75,11 @@ describe ExpressionParser do
       EXPR_PARSER.should parse_as(str,ExpressionNode)
     end
   end
+  
+  context 'separated by spaces, tabs, carriage returns, and newlines' do
+    it 'should parse as ExpressionNode' do
+      str = "(mp /2 ppp \n /2) /4 /4 \r\n /4"
+      EXPR_PARSER.should parse_as(str,ExpressionNode)
+    end
+  end
 end

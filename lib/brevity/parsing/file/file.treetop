@@ -1,0 +1,16 @@
+module Brevity
+
+grammar File
+  include Comment
+  include Command
+  
+  rule file
+    nodes:([\s]* node)* [\s]* <FileNode>
+  end
+  
+  rule node
+    comment / command
+  end
+end
+
+end
