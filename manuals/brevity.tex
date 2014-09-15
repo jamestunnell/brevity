@@ -7,20 +7,23 @@
 \author{James Tunnell}
 \title{brevity\\
 \begin{LARGE}
-A Compact Music Notation Format
+Synatx Guide
 \end{LARGE}}
 \maketitle
-
-\begin{abstract}
-In a computer, music notation is usually represented by some file format. Music notation formats are often awkward or impossible to work with directly, and require a visualization layer that does not resemble the underlying representation. Brevity is a simple file format that is straight-forward to both read and modify directly.
-\end{abstract}
-
 \tableofcontents
 
 \section{Introduction}
-Music notation formats generally have no natural visual resemblance to the physical musical notations they represent. This is unfortunate since for composers the visual arrangement of a composition conveys information about musical structure, since it shows parts together in parallel throughout time. So to allow computer-assisted composers to get the desired visual benefit, an extra visualization layer is provided, so that a digital score is presented in the end. But to gain the full benefit, a composer also needs to be able manipulate the digital score as if it is the very representation of the music. So in the end the extra layer must translate both directions between the extra presentation layer and the underlying representation layer.
+\verb|brevity| is a music notation syntax that aims to be simple, compact, human-readable, and human-editable. A \verb|brevity| file consists of commands and expressions.
 
-The brevity format presented here strives to be as functional as a traditional file format (like MIDI or MusicXML) yet visually similar to a physical score. There is added complexity though, because in order to directly view and manipulate a file in this format one must be familiar with the particular syntax and symbols used to represent musical constructs. The following sections explain these particulars in detail.
+\section{Command Syntax}
+Commands in \verb|brevity| look just like commands in \LaTeX. First, a command starts with a backslash '\verb|\|' followed by the command name. Command names consist only of lowercase letters (examples: \verb|\float|, \verb|\exercise|). Then, if the command takes arguments, they are passed in by a series of open-close curly braces '\verb|{}|'. Here is an example command that takes two arguments:
+
+\begin{tabbing}
+  \hspace{0.5in}\= \verb|\step{left}{right}|
+\end{tabbing}
+
+\section{Expression Syntax}
+An expression is a series of space-separated music elements or subexpressions. Expressions containing notes have non-zero duration.
 
 \section{Note and Rests}
 The basic units of a score are the notes and rests, because they define how time is broken up and what should happen during each time chunk. For a rest, of course, nothing should happen. 
@@ -123,7 +126,7 @@ A sequence can either be labeled for later reused, or modified to produce a new 
 \subsection{Labeling Sequences}
 Sequences are assigned to a label using a \verb|\beginsequence| statement, followed by a a note sequence, as in
 \begin{tabbing}
-  \hspace{0.5in}\= \verb|\seq{my_label}{/8C5 /8D5 /8E5 /8D5 /2C5}|
+  \hspace{0.5in}\= \verb|\expr{my_label}{/8C5 /8D5 /8E5 /8D5 /2C5}|
 \end{tabbing}
 
 Once labeled, the label can be used in place of the sequence. 
@@ -131,19 +134,19 @@ Once labeled, the label can be used in place of the sequence.
 \subsubsection{Continuing Labeled Sequences}
 A labeled sequence can be continued later, which will add more notes onto the end of the sequence. This might also be called concatenation.
 
-A labeled sequence is continued using a \verb|\seq| statement, as in
+A labeled sequence is continued using a \verb|\expr| statement, as in
 \begin{tabbing}
-  \hspace{0.5in}\= \verb|\seq{bass}{ /8C4 /8C4 /8C4 /8C4 }| \\
-  \> \verb|\seq{bass}{ /8E4 /8E4 /8E4 /8E4 }|
+  \hspace{0.5in}\= \verb|\expr{bass}{ /8C4 /8C4 /8C4 /8C4 }| \\
+  \> \verb|\expr{bass}{ /8E4 /8E4 /8E4 /8E4 }|
 \end{tabbing}
 
 This allows a sequence to span over multiple lines by starting each line with the same label. But continuing lines do not have to be consecutive, as long as the same label is used for each continuing line. So, multiple parts can be interleaved as follows:
 \begin{tabbing}
-  \hspace{1in}\= \verb| \seq{bass}{ /4C4 /4C4 /4C4 /4C4 }| \\
-  \> \verb| \seq{lead}{ /2E6 /2E6 }| \\
+  \hspace{1in}\= \verb| \expr{bass}{ /4C4 /4C4 /4C4 /4C4 }| \\
+  \> \verb| \expr{lead}{ /2E6 /2E6 }| \\
   \> ~\\
-  \> \verb| \seq{bass}{ /4E4 /4E4 /4E4 /4E4 }| \\
-  \> \verb| \seq{lead}{ /2G6 /2G6 }| \\
+  \> \verb| \expr{bass}{ /4E4 /4E4 /4E4 /4E4 }| \\
+  \> \verb| \expr{lead}{ /2G6 /2G6 }| \\
 \end{tabbing}
 
 \subsection{Modifying Sequences}
@@ -213,8 +216,8 @@ For example,
 
 Of course, labels can be used in places of sequences, as in
 \begin{tabbing}
-  \hspace{1in}\= \verb|\seq{seq1}{ /4F4 /4G4 }| \\
-  \> \verb|\seq{seq2}{ seq1:2 seq1+2 }|
+  \hspace{1in}\= \verb|\expr{seq1}{ /4F4 /4G4 }| \\
+  \> \verb|\expr{seq2}{ seq1:2 seq1+2 }|
 \end{tabbing}
 
 \subsubsection{Chaining Modifications}
@@ -241,18 +244,18 @@ Dynamic level can be gradually changed over time with a crescendo or decrescendo
 The final goal of the music notation file is to compose a score, which has one or more parts. All of the parts declared anywhere in the file will be added to the score. Besides at least one part, the only other information that is required is a starting tempo. The following subsections cover parts and starting tempo.
 
 \subsection{Parts}
-A \verb|\part| statement associates a name with a note sequence. The note sequence must begin with a starting dynamic level. Like the sequence statement, all the lines following a part statement will be included until the next statement is reached. 
+A \verb|\part| statement associates a name with a musical part. The part consists of: start dynamic, dynamic changes, and notes. The start dynamic is given as a separate parameter, and the dynamic changes and notes are given together in the expression parameter.
 
 Here is an example of the syntax:
 
 \begin{tabbing}
-  \hspace{0.5in}\= \verb|\part{Lead Guitar}{mf /8D5 /8Eb5 /4F5 3/4C5}|
+  \hspace{0.5in}\= \verb|\part{Lead Guitar}{mf}{/8D5 /8Eb5 /4F5 3/4C5}|
 \end{tabbing}
 
-Notice in the example there is a starting dynamic level, mezzo forte, just before the note sequence. Here is another example, this time using labeled sequence:
+Notice in the example there is a starting dynamic level, mezzo forte, just before the note sequence. Here is another example, this time using labeled expressions:
 
 \begin{tabbing}
-  \hspace{0.5in}\= \verb|\part{Piano}{pp sectA sectB:2 sectA}| \\
+  \hspace{0.5in}\= \verb|\part{Piano}{pp}{sectA sectB:2 sectA}| \\
 \end{tabbing}
 
 Parts can be declared anywhere in the file, and they will be added to the score.
@@ -261,7 +264,7 @@ Parts can be declared anywhere in the file, and they will be added to the score.
 A starting tempo is defined by a \verb|\starttempo| statement, which can be placed anywhere in the file. The tempo given must inculde the beat duration. Here is an example, with a tempo of 120 bpm and a quarter note beat duration:
 
 \begin{tabbing}
-  \hspace{0.5in}\= \verb|\starttempo{120,/4}|
+  \hspace{0.5in}\= \verb|\starttempo{@120,/4}|
 \end{tabbing}
 
 \section{Comments}
