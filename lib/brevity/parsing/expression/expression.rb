@@ -32,20 +32,21 @@ module Expression
 
   module Expression1
     def pre
-      elements[0]
-    end
-
-    def expr
       elements[1]
     end
 
-    def more
+    def expr
       elements[2]
     end
 
-    def post
+    def more
       elements[3]
     end
+
+    def post
+      elements[4]
+    end
+
   end
 
   def _nt_expression
@@ -60,27 +61,78 @@ module Expression
     end
 
     i0, s0 = index, []
-    r2 = _nt_pre_changes
-    if r2
-      r1 = r2
-    else
-      r1 = instantiate_node(SyntaxNode,input, index...index)
+    s1, i1 = [], index
+    loop do
+      if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+        r2 = true
+        @index += 1
+      else
+        terminal_parse_failure('[\\s]')
+        r2 = nil
+      end
+      if r2
+        s1 << r2
+      else
+        break
+      end
     end
+    r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
     s0 << r1
     if r1
-      r3 = _nt_expr
+      r4 = _nt_pre_changes
+      if r4
+        r3 = r4
+      else
+        r3 = instantiate_node(SyntaxNode,input, index...index)
+      end
       s0 << r3
       if r3
-        s4, i4 = [], index
-        loop do
-          i5, s5 = index, []
+        r5 = _nt_expr
+        s0 << r5
+        if r5
           s6, i6 = [], index
           loop do
-            if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
-              r7 = true
-              @index += 1
+            i7, s7 = index, []
+            s8, i8 = [], index
+            loop do
+              if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+                r9 = true
+                @index += 1
+              else
+                terminal_parse_failure('[\\s]')
+                r9 = nil
+              end
+              if r9
+                s8 << r9
+              else
+                break
+              end
+            end
+            if s8.empty?
+              @index = i8
+              r8 = nil
             else
-              terminal_parse_failure('[\\s]')
+              r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+            end
+            s7 << r8
+            if r8
+              r11 = _nt_pre_changes
+              if r11
+                r10 = r11
+              else
+                r10 = instantiate_node(SyntaxNode,input, index...index)
+              end
+              s7 << r10
+              if r10
+                r12 = _nt_expr
+                s7 << r12
+              end
+            end
+            if s7.last
+              r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+              r7.extend(Expression0)
+            else
+              @index = i7
               r7 = nil
             end
             if r7
@@ -89,49 +141,36 @@ module Expression
               break
             end
           end
-          if s6.empty?
-            @index = i6
-            r6 = nil
-          else
-            r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
-          end
-          s5 << r6
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          s0 << r6
           if r6
-            r9 = _nt_pre_changes
-            if r9
-              r8 = r9
+            r14 = _nt_post_changes
+            if r14
+              r13 = r14
             else
-              r8 = instantiate_node(SyntaxNode,input, index...index)
+              r13 = instantiate_node(SyntaxNode,input, index...index)
             end
-            s5 << r8
-            if r8
-              r10 = _nt_expr
-              s5 << r10
+            s0 << r13
+            if r13
+              s15, i15 = [], index
+              loop do
+                if has_terminal?(@regexps[gr = '\A[\\s]'] ||= Regexp.new(gr), :regexp, index)
+                  r16 = true
+                  @index += 1
+                else
+                  terminal_parse_failure('[\\s]')
+                  r16 = nil
+                end
+                if r16
+                  s15 << r16
+                else
+                  break
+                end
+              end
+              r15 = instantiate_node(SyntaxNode,input, i15...index, s15)
+              s0 << r15
             end
           end
-          if s5.last
-            r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-            r5.extend(Expression0)
-          else
-            @index = i5
-            r5 = nil
-          end
-          if r5
-            s4 << r5
-          else
-            break
-          end
-        end
-        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-        s0 << r4
-        if r4
-          r12 = _nt_post_changes
-          if r12
-            r11 = r12
-          else
-            r11 = instantiate_node(SyntaxNode,input, index...index)
-          end
-          s0 << r11
         end
       end
     end

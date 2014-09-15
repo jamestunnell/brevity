@@ -1,11 +1,11 @@
 module Brevity
 
 grammar Tempo
-  include PositiveInteger
-  include Duration
+  include TempoFull
+  include TempoPartial
   
   rule tempo
-    bpm:positive_integer more:("," beat_dur:duration)? <TempoNode>
+    tempo_full / tempo_partial
   end
 end
 

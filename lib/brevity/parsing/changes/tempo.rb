@@ -10,25 +10,9 @@ module Tempo
     @root ||= :tempo
   end
 
-  include PositiveInteger
+  include TempoFull
 
-  include Duration
-
-  module Tempo0
-    def beat_dur
-      elements[1]
-    end
-  end
-
-  module Tempo1
-    def bpm
-      elements[0]
-    end
-
-    def more
-      elements[1]
-    end
-  end
+  include TempoPartial
 
   def _nt_tempo
     start_index = index
@@ -41,43 +25,20 @@ module Tempo
       return cached
     end
 
-    i0, s0 = index, []
-    r1 = _nt_positive_integer
-    s0 << r1
+    i0 = index
+    r1 = _nt_tempo_full
     if r1
-      i3, s3 = index, []
-      if (match_len = has_terminal?(",", false, index))
-        r4 = true
-        @index += match_len
-      else
-        terminal_parse_failure(",")
-        r4 = nil
-      end
-      s3 << r4
-      if r4
-        r5 = _nt_duration
-        s3 << r5
-      end
-      if s3.last
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        r3.extend(Tempo0)
-      else
-        @index = i3
-        r3 = nil
-      end
-      if r3
-        r2 = r3
-      else
-        r2 = instantiate_node(SyntaxNode,input, index...index)
-      end
-      s0 << r2
-    end
-    if s0.last
-      r0 = instantiate_node(TempoNode,input, i0...index, s0)
-      r0.extend(Tempo1)
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
+      r0 = r1
     else
-      @index = i0
-      r0 = nil
+      r2 = _nt_tempo_partial
+      if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
+        r0 = r2
+      else
+        @index = i0
+        r0 = nil
+      end
     end
 
     node_cache[:tempo][start_index] = r0

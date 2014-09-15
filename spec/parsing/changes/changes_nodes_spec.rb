@@ -4,7 +4,7 @@ describe ChangesNode do
   describe '#to_itemization' do
     context 'tempo change only' do
       before :all do
-        @item = CHANGES_PARSER.parse(">120").to_itemization
+        @item = CHANGES_PARSER.parse(">@120").to_itemization
       end
       
       it 'should return Itemization' do
@@ -44,7 +44,7 @@ describe ChangesNode do
     
     context 'dynamic change, then tempo change' do
       before :all do
-        @item = CHANGES_PARSER.parse("<f 200").to_itemization
+        @item = CHANGES_PARSER.parse("<f @200").to_itemization
       end
       
       it 'should return Itemization' do
@@ -66,7 +66,7 @@ describe ChangesNode do
     
     context 'tempo change, then dynamic change' do
       before :all do
-        @item = CHANGES_PARSER.parse("< 200 < fff").to_itemization
+        @item = CHANGES_PARSER.parse("< @200 < fff").to_itemization
       end
       
       it 'should return Itemization' do

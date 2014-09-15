@@ -8,10 +8,12 @@ grammar Expression
   include Modifier
   
   rule expression
+    [\s]*
     pre:pre_changes?
     expr
     more:([\s]+ pre:pre_changes? expr)*
     post:post_changes?
+    [\s]*
     <ExpressionNode>
   end
   

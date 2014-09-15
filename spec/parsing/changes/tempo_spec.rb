@@ -7,7 +7,7 @@ describe TempoParser do
   
   context 'valid tempo (bpm only)' do
     it 'should parse as TempoNode' do
-      ["120","300","5"].each do |str|
+      ["@120","@300","@5"].each do |str|
         @parser.should parse_as(str,TempoNode)
       end
     end
@@ -15,7 +15,7 @@ describe TempoParser do
 
   context 'valid tempo (bpm and beat duration)' do
     it 'should parse as TempoNode' do
-      ["120,/4","300,2/","5,3/8"].each do |str|
+      ["@120,/4","@300,2/","@5,3/8"].each do |str|
         @parser.should parse_as(str,TempoNode)
       end
     end

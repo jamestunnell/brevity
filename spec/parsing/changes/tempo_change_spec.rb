@@ -7,7 +7,7 @@ describe TempoChangeParser do
   
   context 'gradual tempo change' do
     it 'should parse' do
-      ["> 120","< 5",">20"].each do |str|
+      ["> @120","< @5",">@20"].each do |str|
         @parser.should parse(str)
       end
     end
@@ -15,7 +15,7 @@ describe TempoChangeParser do
 
   context 'immediate tempo change' do
     it 'should parse' do
-      ["120","90","315"].each do |str|
+      ["@120","@90","@315"].each do |str|
         @parser.should parse(str)
       end
     end

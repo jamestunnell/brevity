@@ -1,0 +1,12 @@
+module Brevity
+
+grammar TempoFull
+  include TempoPartial
+  include Duration
+  
+  rule tempo_full
+    tempo_partial "," duration <TempoFullNode>
+  end
+end
+
+end
