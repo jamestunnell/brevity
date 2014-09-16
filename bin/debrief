@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+require 'brevity'
+require 'docopt'
+require 'yaml'
+
+exe_name = File.basename(__FILE__)
+
+doc = <<DOCOPT
+Parses a Brevity file, outputting a music-transcription parts as YAML.
+
+Usage:
+  #{exe_name} <input> <output>
+  #{exe_name} -h | --help
+  #{exe_name} --version
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+
+DOCOPT
+
+begin
+  require "pp"
+  args = Docopt::docopt(doc)
+  pp args
+rescue Docopt::Exit => e
+  puts e.message
+  exit
+end
+
+print "Reading file..."
+cmd_nodes = Brevity.read_file args["<input>"]
+puts "complete"
+
+sm = Brevity::ScoreMaker.new
+
+print "Processing commands..."
+sm.process_nodes cmd_nodes
+puts "complete"
+
+print "Making score..."
+score = sm.make_score
+puts "complete"
+  
+print "Writing to YAML file..."
+File.open(args["<output>"],"w") do |outf|
+  outf.write(YAML.dump(score))
+end
+puts "complete"
