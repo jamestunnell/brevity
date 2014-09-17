@@ -55,7 +55,7 @@ require 'brevity/parsing/file/file'
 require 'brevity/parsing/file/file_node'
 
 require 'brevity/commands/constants'
-require 'brevity/commands/starttempo'
+require 'brevity/commands/tempo'
 require 'brevity/commands/expr'
 require 'brevity/commands/part'
 

@@ -67,3 +67,16 @@ COMMENT_PARSER = CommentParser.new
 CHANGES_PARSER = ChangesParser.new
 COMMAND_PARSER = CommandParser.new
 FILE_PARSER = FileParser.new
+
+class CommandTester
+  include Commands
+  
+  attr_reader :env
+  def initialize
+    @env = {}
+    @env[ENV_STARTTEMPO] = nil
+    @env[ENV_TEMPO_CHANGES] = {}
+    @env[ENV_EXPRS] = {}
+    @env[ENV_PARTS] = {}
+  end
+end

@@ -18,6 +18,12 @@ module PositiveInteger
     end
   end
 
+  module PositiveInteger1
+    def to_i
+      text_value.to_i
+    end
+  end
+
   def _nt_positive_integer
     start_index = index
     if node_cache[:positive_integer].has_key?(index)
@@ -64,6 +70,7 @@ module PositiveInteger
     if s0.last
       r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
       r0.extend(PositiveInteger0)
+      r0.extend(PositiveInteger1)
     else
       @index = i0
       r0 = nil
