@@ -1,45 +1,39 @@
 module Brevity
 
 grammar Expression
-  include Changes
+  include Gradual
+  include Dynamic
   include Note
-  include Sequence
   include Label
   include Modifier
   
   rule expression
     [\s]*
-    pre:pre_changes?
     expr
-    more:([\s]+ pre:pre_changes? expr)*
-    post:post_changes?
+    more:([\s]+ expr)*
     [\s]*
     <ExpressionNode>
   end
   
-  rule post_changes
-    [\s]+ changes
+  rule expr_element
+    gradual / dynamic / note / label <ExprElementNode>
   end
   
-  rule pre_changes
-    changes [\s]+
-  end
-
   rule expr
-    modified_expr / plain_expr
+    modifiable / nonmodifiable
   end
   
-  rule plain_expr
-    group / label / sequence / note
-  end
-  
-  rule modified_expr
-    base:(group / label / note) modifiers:modifier+ <ModifiedNode>
+  rule modifiable
+    base:(group / label / note) mods:modifier* <ModifiableNode>
   end
   
   rule group
     "(" [\s]* expression [\s]* ")" <GroupNode>
   end
+
+  rule nonmodifiable
+    gradual / dynamic
+  end  
 end
 
 end

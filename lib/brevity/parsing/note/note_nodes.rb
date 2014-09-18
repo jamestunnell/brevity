@@ -22,6 +22,10 @@ module Brevity
     def itemize(env)
       Itemization.new(notes: [self.to_note])
     end
+    
+    def primitives env
+      [ self.to_note ]
+    end
   end
   
   class RestNoteNode < NoteNode

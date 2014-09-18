@@ -1,11 +1,8 @@
 module Brevity  
   class DuplicateModifierNode < Treetop::Runtime::SyntaxNode
-    def process itemization
-      b = itemization.clone
-      (ntimes.text_value.to_i - 1).times do |n|
-        itemization = itemization.append b
-      end
-      return itemization
+    def process primitives
+      n = ntimes.text_value.to_i
+      Array.new(n){|i| primitives.clone }.flatten
     end
   end
 end

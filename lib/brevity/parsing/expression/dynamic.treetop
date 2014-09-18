@@ -1,7 +1,7 @@
 module Brevity
 
-grammar DynamicLevel
-  rule dynamic_level
+grammar Dynamic
+  rule dynamic
     ppp / pp / p / mp / mf / fff / ff / f
   end
   

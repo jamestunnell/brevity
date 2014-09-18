@@ -1,0 +1,9 @@
+module Brevity
+
+grammar Gradual
+  rule gradual
+    "<" / ">" <GradualNode>
+  end
+end
+
+end

@@ -11,7 +11,7 @@ module Brevity
         raise ArgumentError, "Could not parse expr string '#{expr_str}'"
       end
       
-      @env[ENV_EXPRS][label_node.to_key] = expr_node.itemize(@env)
+      @env[ENV_EXPRS][label_node.to_key] = expr_node.primitives(@env[ENV_EXPRS])
     end
   end
 end

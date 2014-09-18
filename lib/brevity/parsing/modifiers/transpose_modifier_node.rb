@@ -1,11 +1,13 @@
 module Brevity  
   class TransposeModifierNode < Treetop::Runtime::SyntaxNode
-    def process itemization
+    def process primitives
       n = nsem.text_value.to_i
       if op.text_value == "-"
         n = -n
       end
-      itemization.transpose n
+      primitives.map do |p|
+        p.respond_to?(:transpose) ? p.transpose(n) : p
+      end
     end
   end
 end

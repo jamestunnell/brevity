@@ -3,19 +3,19 @@
 
 module Brevity
 
-module DynamicLevel
+module Dynamic
   include Treetop::Runtime
 
   def root
-    @root ||= :dynamic_level
+    @root ||= :dynamic
   end
 
-  def _nt_dynamic_level
+  def _nt_dynamic
     start_index = index
-    if node_cache[:dynamic_level].has_key?(index)
-      cached = node_cache[:dynamic_level][index]
+    if node_cache[:dynamic].has_key?(index)
+      cached = node_cache[:dynamic][index]
       if cached
-        node_cache[:dynamic_level][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:dynamic][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -73,7 +73,7 @@ module DynamicLevel
       end
     end
 
-    node_cache[:dynamic_level][start_index] = r0
+    node_cache[:dynamic][start_index] = r0
 
     r0
   end
@@ -272,8 +272,8 @@ module DynamicLevel
 
 end
 
-class DynamicLevelParser < Treetop::Runtime::CompiledParser
-  include DynamicLevel
+class DynamicParser < Treetop::Runtime::CompiledParser
+  include Dynamic
 end
 
 

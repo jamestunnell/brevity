@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe DynamicLevelParser do
+describe DynamicParser do
   before :all do
-    @parser = DynamicLevelParser.new
+    @parser = DynamicParser.new
   end
   
   context 'valid dynamic level' do

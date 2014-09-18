@@ -1,47 +1,53 @@
 module Brevity
-  class PianississimoNode < Treetop::Runtime::SyntaxNode
+  class DynamicNode < Treetop::Runtime::SyntaxNode
+    def primitives env
+      [ self.to_dynamic ]
+    end
+  end
+  
+  class PianississimoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Pianississimo.new
     end
   end
   
-  class PianissimoNode < Treetop::Runtime::SyntaxNode
+  class PianissimoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Pianissimo.new
     end
   end
   
-  class PianoNode < Treetop::Runtime::SyntaxNode
+  class PianoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Piano.new
     end
   end
   
-  class MezzoPianoNode < Treetop::Runtime::SyntaxNode
+  class MezzoPianoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::MezzoPiano.new
     end
   end
   
-  class  MezzoForteNode < Treetop::Runtime::SyntaxNode
+  class  MezzoForteNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::MezzoForte.new
     end
   end
   
-  class ForteNode < Treetop::Runtime::SyntaxNode
+  class ForteNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Forte.new
     end
   end
   
-  class  FortissimoNode < Treetop::Runtime::SyntaxNode
+  class  FortissimoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Fortissimo.new
     end
   end
   
-  class FortississimoNode < Treetop::Runtime::SyntaxNode
+  class FortississimoNode < DynamicNode
     def to_dynamic
       Music::Transcription::Dynamic::Fortississimo.new
     end

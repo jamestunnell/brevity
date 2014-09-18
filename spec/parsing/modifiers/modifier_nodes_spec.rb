@@ -8,14 +8,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
   describe nodeclass do
     describe '#process' do
-      it 'should produce a modified Itemization, according to str' do
+      it 'should produce a modified array, according to str' do
         SEQUENCES.each do |seqstr,src|
           MODIFIERS[modtype].each do |modstr,modlambda|
             tgt = modlambda.call(src)
             
             modnode = modparser.parse(modstr)
             res = modnode.process src
-            res.should be_a Itemization
+            res.should be_a Array
             res.should eq tgt
           end
         end

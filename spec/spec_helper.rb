@@ -29,42 +29,70 @@ sequences = {}
 [2,3].each do |n|
   NOTES.entries.permutation(n).each do |perm|
     strs, notes = perm.transpose
-    sequences[strs.join(" ")] = Itemization.new(notes:notes)
+    sequences[strs.join(" ")] = notes
   end
 end
 SEQUENCES = sequences
 
 MODIFIERS = {
   :duplicate => {
-    ':1' => lambda {|itemization| itemization.clone },
-    ':2' => lambda {|itemization| itemization.append(itemization.clone) },
-    ':3' => lambda {|itemization| itemization.append(itemization.clone).append(itemization.clone) }
+    ':1' => lambda {|primitives| primitives.clone },
+    ':2' => lambda {|primitives| primitives.clone + primitives.clone },
+    ':3' => lambda {|primitives| primitives.clone + primitives.clone + primitives.clone }
   },
   :stretch => {
-    '*1' => lambda {|itemization| itemization.clone },
-    '*3/2' => lambda {|itemization| itemization.stretch('3/2'.to_r) },
-    '*/4' => lambda {|itemization| itemization.stretch('1/4'.to_r) },
-    '=1' => lambda {|itemization| itemization.stretch(1 / itemization.duration) },
-    '=/2' => lambda {|itemization| itemization.stretch("1/2".to_r / itemization.duration) },
-    '=2/3' => lambda {|itemization| itemization.stretch("2/3".to_r / itemization.duration) }
+    '*1' => lambda {|primitives| primitives.clone },
+    '*3/2' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:stretch) ? p.stretch('3/2'.to_r) : p }
+    end,
+    '*/4' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:stretch) ? p.stretch('1/4'.to_r) : p }
+    end,
+    '=1' => lambda do |primitives|
+      duration = primitives.map do |p|
+        p.respond_to?(:duration) ? p.duration : 0
+      end.inject(0,:+)
+      ratio = 1 / duration
+      primitives.map {|p| p.respond_to?(:stretch) ? p.stretch(ratio) : p }
+    end,
+    '=/2' => lambda do |primitives|
+      duration = primitives.map do |p|
+        p.respond_to?(:duration) ? p.duration : 0
+      end.inject(0,:+)
+      ratio = Rational(1,2) / duration
+      primitives.map {|p| p.respond_to?(:stretch) ? p.stretch(ratio) : p }
+    end,
+    '=2/3' => lambda do |primitives|
+      duration = primitives.map do |p|
+        p.respond_to?(:duration) ? p.duration : 0
+      end.inject(0,:+)
+      ratio = Rational(2,3) / duration
+      primitives.map {|p| p.respond_to?(:stretch) ? p.stretch(ratio) : p }
+    end,
   },
   :transpose => {
-    '+0' => lambda {|itemization| itemization.clone },
-    '-0' => lambda {|itemization| itemization.clone },
-    '+4' => lambda {|itemization| itemization.transpose(4) },
-    '-4' => lambda {|itemization| itemization.transpose(-4) },
-    '+10' => lambda {|itemization| itemization.transpose(+10) },
-    '-99' => lambda {|itemization| itemization.transpose(-99) }
+    '+0' => lambda {|primitives| primitives.clone },
+    '-0' => lambda {|primitives| primitives.clone },
+    '+4' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:transpose) ? p.transpose(4) : p }
+    end,
+    '-4' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:transpose) ? p.transpose(-4) : p }
+    end,
+    '+10' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:transpose) ? p.transpose(10) : p }
+    end,
+    '-99' => lambda do |primitives|
+      primitives.map {|p| p.respond_to?(:transpose) ? p.transpose(-99) : p }
+    end
   }
 }
 
-SEQ_PARSER = SequenceParser.new
 EXPR_PARSER = ExpressionParser.new
 DUR_PARSER = DurationParser.new
 NOTE_PARSER = NoteParser.new
 LABEL_PARSER = LabelParser.new
 COMMENT_PARSER = CommentParser.new
-CHANGES_PARSER = ChangesParser.new
 COMMAND_PARSER = CommandParser.new
 FILE_PARSER = FileParser.new
 

@@ -7,8 +7,7 @@ module Brevity
     
     EXPR_PARSER = ExpressionParser.new
     LABEL_PARSER = LabelParser.new
-    DYNAMIC_PARSER = DynamicLevelParser.new
-    TEMPO_FULL_PARSER = TempoFullParser.new
+    DYNAMIC_PARSER = DynamicParser.new
     
     def class_const sym
       self.class.const_get(sym)

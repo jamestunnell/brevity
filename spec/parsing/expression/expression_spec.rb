@@ -71,7 +71,7 @@ describe ExpressionParser do
   
   context 'with dynamic changes' do
     it 'should parse as ExpressionNode' do
-      str = "mp /2 ppp /2A2 <f /4C4 >mp"
+      str = "mp /2 > /2A2 f < /4C4 mp"
       EXPR_PARSER.should parse_as(str,ExpressionNode)
     end
   end
