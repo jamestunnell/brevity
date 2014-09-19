@@ -3,5 +3,9 @@ module Brevity
     def primitives env
       [ self ]
     end
+    
+    def ==(other)
+      other.is_a?(GradualNode)
+    end
   end
 end

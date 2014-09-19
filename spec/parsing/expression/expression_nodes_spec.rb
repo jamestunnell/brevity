@@ -36,6 +36,22 @@ describe ExpressionNode do
         end
       end
     end
+    
+    context 'with dynamic changes' do
+      it 'should convert dynamic changes to dynamic values and gradual nodes' do
+        {
+          "mp /2 > /2A2 f < /4C4 mp" => [
+            Dynamics::MP, Note::Half.new, GradualParser.new.parse(">"),
+            Note::Half.new([A2]), Dynamics::F, GradualParser.new.parse("<"),
+            Note::Quarter.new([C4]), Dynamics::MP
+          ]
+        }.each do |str,tgt|
+          node = EXPR_PARSER.parse(str)
+          primitives = node.primitives({})
+          primitives.should eq tgt
+        end
+      end
+    end
   end
 end
 

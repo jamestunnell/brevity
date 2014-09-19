@@ -20,7 +20,7 @@ grammar Expression
   end
   
   rule expr
-    modifiable / nonmodifiable
+    nonmodifiable / modifiable
   end
   
   rule modifiable

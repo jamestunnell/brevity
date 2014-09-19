@@ -21,32 +21,12 @@ module Gradual
       return cached
     end
 
-    i0 = index
-    if (match_len = has_terminal?("<", false, index))
-      r1 = true
-      @index += match_len
+    if has_terminal?(@regexps[gr = '\A[<>]'] ||= Regexp.new(gr), :regexp, index)
+      r0 = instantiate_node(GradualNode,input, index...(index + 1))
+      @index += 1
     else
-      terminal_parse_failure("<")
-      r1 = nil
-    end
-    if r1
-      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
-      r0 = r1
-    else
-      if (match_len = has_terminal?(">", false, index))
-        r2 = instantiate_node(GradualNode,input, index...(index + match_len))
-        @index += match_len
-      else
-        terminal_parse_failure(">")
-        r2 = nil
-      end
-      if r2
-        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
-        r0 = r2
-      else
-        @index = i0
-        r0 = nil
-      end
+      terminal_parse_failure('[<>]')
+      r0 = nil
     end
 
     node_cache[:gradual][start_index] = r0

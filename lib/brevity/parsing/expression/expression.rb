@@ -205,12 +205,12 @@ module Expression
     end
 
     i0 = index
-    r1 = _nt_modifiable
+    r1 = _nt_nonmodifiable
     if r1
       r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      r2 = _nt_nonmodifiable
+      r2 = _nt_modifiable
       if r2
         r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2

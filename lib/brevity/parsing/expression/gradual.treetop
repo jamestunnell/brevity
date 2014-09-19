@@ -2,7 +2,7 @@ module Brevity
 
 grammar Gradual
   rule gradual
-    "<" / ">" <GradualNode>
+    [<>] <GradualNode>
   end
 end
 
