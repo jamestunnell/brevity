@@ -38,9 +38,10 @@ module Brevity
         end
       end
       
-      dyn_profile = Music::Transcription::Profile.new(startdyn, dynamic_changes)
       @env[ENV_PARTS][name_str] = Music::Transcription::Part.new(
-        notes: notes, dynamic_profile: dyn_profile)
+        startdyn,
+        notes: notes,
+        dynamic_changes: dynamic_changes)
     end
   end
 end

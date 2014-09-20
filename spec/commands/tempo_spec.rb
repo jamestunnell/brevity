@@ -6,16 +6,15 @@ describe 'Commands.tempo' do
   end
   
   context 'given valid bpm and beatdur strings' do
-    it 'should assign tempo to @env[ENV_STARTTEMPO]' do
-      @tester.tempo("120","1/4")
-      @tester.env[Commands::ENV_STARTTEMPO].should eq(Tempo.new(120,"1/4".to_r))
+    it 'should assign tempo to @env[ENV_START_TEMPO]' do
+      @tester.tempo("120")
+      @tester.env[Commands::ENV_START_TEMPO].should eq(120)
     end
   end
   
   context 'given an invalid bpm or beatdur string' do
     it 'should raise ArgumentError' do
-      expect { @tester.tempo("120.5","1/4") }.to raise_error ArgumentError
-      expect { @tester.tempo("120","1.5") }.to raise_error ArgumentError
+      expect { @tester.tempo("120.5") }.to raise_error ArgumentError
     end
   end
 end
