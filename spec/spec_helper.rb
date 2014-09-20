@@ -102,8 +102,10 @@ class CommandTester
   attr_reader :env
   def initialize
     @env = {}
-    @env[ENV_STARTTEMPO] = nil
+    @env[ENV_START_TEMPO] = nil
+    @env[ENV_START_METER] = nil
     @env[ENV_TEMPO_CHANGES] = {}
+    @env[ENV_METER_CHANGES] = {}
     @env[ENV_EXPRS] = {}
     @env[ENV_PARTS] = {}
   end

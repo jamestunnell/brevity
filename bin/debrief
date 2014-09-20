@@ -10,7 +10,8 @@ doc = <<DOCOPT
 Parses a Brevity file, outputting a music-transcription parts as YAML.
 
 Usage:
-  #{exe_name} <input> [output]
+  #{exe_name} <input>
+  #{exe_name} <input> <output>
   #{exe_name} -h | --help
   #{exe_name} --version
 
@@ -30,7 +31,7 @@ rescue Docopt::Exit => e
 end
 
 fin = args["<input>"]
-print "Reading file #{fin}..."
+print "Reading file '#{fin}'..."
 cmd_nodes = Brevity.read_file fin
 puts "complete"
 
@@ -44,11 +45,11 @@ print "Making score..."
 score = sm.make_score
 puts "complete"
   
-fout = args["<output>"]
+fout = args["[output]"]
 if fout.nil?
   fout = "#{File.dirname(fin)}/#{File.basename(fin,File.extname(fin))}.yml"
 end
-print "Writing file #{fout}..."
+print "Writing file '#{fout}'..."
 File.open(fout,"w") do |f|
   f.write(YAML.dump(score))
 end

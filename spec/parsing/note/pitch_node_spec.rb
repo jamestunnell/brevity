@@ -1,4 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+  
+describe 'String#to_pitch' do
+  it 'should create a Pitch object that matches the musical note' do
+    {
+      "Ab2" => Pitch.new(octave: 2, semitone: 8),
+      "C0" => Pitch.new(octave: 0, semitone: 0),
+      "db4" => Pitch.new(octave: 4, semitone: 1),
+      "F#12" => Pitch.new(octave: 12, semitone: 6),
+      "E#7" => Pitch.new(octave: 7, semitone: 5),
+      "G9" => Pitch.new(octave: 9, semitone: 7),
+      "Bb10" => Pitch.new(octave: 10, semitone: 10),
+    }.each do |str, expected_pitch|
+      str.to_pitch.should eq(expected_pitch)
+    end
+  end
+end
 
 describe PitchNode do
   parser = PitchParser.new
