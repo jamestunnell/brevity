@@ -1,0 +1,15 @@
+\meter{4}{/4}
+\tempo{120}
+
+\expr{bass}{
+  /6Bb2 /4 /3Ab2 /6F2 /12Ab2
+  /6Bb2 /4 /3Ab2 /4Ab2
+}
+
+\expr{lead}{
+  /6Bb3 /4 5/18Db4 /36Eb4 /36Db4 /6Ab4 /12Db4
+  /6Bb3 /4 11/24Db4 /8C4
+}
+
+\part{Bass}{mf}{ bass:2 bass+2 bass }
+\part{Lead}{mf}{ lead:2 lead+2 lead }

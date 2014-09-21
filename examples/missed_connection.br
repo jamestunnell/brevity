@@ -1,0 +1,6 @@
+\meter{4}{/4}
+\tempo{120}
+
+\expr{a}{ /4Eb2 /4 /4Bb2 /4 /4Eb2 /8 /8B2 /4Bb2 /4Ab2 }
+\expr{b}{ /4Bb2 /8 5/8F3 /4Bb2 /8 5/8F3 }
+\part{bass}{mf}{ (a:2 b b+1):2 }

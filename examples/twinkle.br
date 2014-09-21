@@ -1,0 +1,18 @@
+\meter{4}{/4}
+\tempo{90}
+
+# A
+
+\expr{rhA}{ /4C4:2 /4G4:2 /4A4:2 /2G4
+            /4F4:2 /4E4:2 /4D4:2 /2C4 }
+
+\expr{lhA}{ 1E3           /2F3   /2E3
+            /2A3   /2G3   /2F3   /2E3 }
+
+# B
+
+\expr{rhB}{ /4G4:2 /4F4:2 /4E4:2 /2D4 }
+\expr{lhB}{ 1C4           /2C4   /2G3 }
+
+\part{L. Hand}{mf}{ rhA rhB:2 rhA }
+\part{R. Hand}{f }{ lhA lhB:2 lhA }

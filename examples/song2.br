@@ -1,0 +1,10 @@
+\meter{4}{/4}
+\tempo{120}
+
+\expr{a}{ 1C4 1Bb3 1Ab3 /2G3 /2Bb3 }
+\expr{b}{ 3/8E5 1D5 1C5 5/8C5 /2C5 /2D5 }
+\expr{c}{ /8 /4G5 /2F5 /4 /4F5 /2Eb5 /4 /4Eb5 /2Eb5 /8 /2Eb5 /2F5 }
+
+\part{1}{mf}{ a:2 }
+\part{2}{mf}{ b:2 }
+\part{3}{mf}{ c:2 }
